@@ -55,7 +55,7 @@ class SolarSystemObj(CatalogDBObject):
     def getIdColKey(self):
         return 'ssmid'
 
-    def query_columns(self, colnames=None, chunk_size=None, obs_metadata=None, constraint=None):
+    def query_columns(self, colnames=None, chunk_size=None, obs_metadata=None, constraint=None, returnRecArray=False):
         """Execute a query
 
         **Parameters**
@@ -115,4 +115,4 @@ class SolarSystemObj(CatalogDBObject):
         if constraint is not None:
             query += "where %s"%(constraint)
 
-        return ChunkIterator(self, query, chunk_size)
+        return ChunkIterator(self, query, chunk_size, arbitrarySQL=returnRecArray)

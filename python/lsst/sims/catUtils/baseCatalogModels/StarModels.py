@@ -42,7 +42,7 @@ class StarBase(CatalogDBObject):
 
 
     def query_columns(self, colnames=None, chunk_size=None,
-                      obs_metadata=None, constraint=None):
+                      obs_metadata=None, constraint=None, returnRecArray=False):
         """Execute a query
 
         **Parameters**
@@ -114,7 +114,7 @@ class StarBase(CatalogDBObject):
         if constraint is not None:
             query = query.filter(constraint)
 
-        return ChunkIterator(self, query, chunk_size)
+        return ChunkIterator(self, query, chunk_size, arbitrarySQL=returnRecArray)
 
 
 

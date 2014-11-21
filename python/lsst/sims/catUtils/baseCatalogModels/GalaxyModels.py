@@ -253,7 +253,7 @@ class GalaxyTileObj(CatalogDBObject):
     def getIdColKey(self):
         return 'galtileid'
 
-    def query_columns(self, colnames=None, chunk_size=None, obs_metadata=None, constraint=None):
+    def query_columns(self, colnames=None, chunk_size=None, obs_metadata=None, constraint=None, returnRecArray=False):
         """Execute a query
 
         **Parameters**
@@ -318,7 +318,7 @@ class GalaxyTileObj(CatalogDBObject):
         if constraint is not None:
             query += ", @WhereClause = '%s'"%(constraint)
 
-        return ChunkIterator(self, query, chunk_size)
+        return ChunkIterator(self, query, chunk_size, arbitrarySQL=returnRecArray)
 
 class GalaxyBulgeObj(GalaxyTileObj):
     objid = 'galaxyBulge'
