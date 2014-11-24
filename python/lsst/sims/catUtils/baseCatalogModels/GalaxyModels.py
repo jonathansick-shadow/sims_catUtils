@@ -271,6 +271,8 @@ class GalaxyTileObj(CatalogDBObject):
               to query and time of the observation.
             * constraint : string (optional)
               if specified, the predicate is added to the query verbatim using AND
+            * returnRecArray : boolean (optional)
+              if True, results will be formatted and returned as a recarray
 
         **Returns**
 
