@@ -1,11 +1,12 @@
 import math
 from lsst.sims.catalogs.generation.db import CatalogDBObject
 from lsst.sims.utils import ObservationMetaData, SpatialBounds
-#The following is to get the object ids in the registry
+# The following is to get the object ids in the registry
 import lsst.sims.catUtils.baseCatalogModels as bcm
 from lsst.sims.catUtils.exampleCatalogDefinitions import RefCatalogGalaxyBase, PhoSimCatalogPoint,\
-                                                         PhoSimCatalogZPoint, PhoSimCatalogSersic2D
+    PhoSimCatalogZPoint, PhoSimCatalogSersic2D
 from lsst.sims.utils import makeObsParamsAzAltTel, makeObsParamsRaDecTel
+
 
 def exampleReferenceCatalog():
     """
@@ -18,13 +19,14 @@ def exampleReferenceCatalog():
     The catalog is output to the file test_reference.dat
     """
 
-    obs_metadata = ObservationMetaData(boundType='circle',pointingRA=0.0,pointingDec=0.0,
-                       boundLength=0.01, mjd=53850.0)
+    obs_metadata = ObservationMetaData(boundType='circle', pointingRA=0.0, pointingDec=0.0,
+                                       boundLength=0.01, mjd=53850.0)
     dbobj = CatalogDBObject.from_objid('galaxyBase')
 
     t = dbobj.getCatalog('ref_catalog_galaxy', obs_metadata=obs_metadata)
     filename = 'test_reference.dat'
     t.write_catalog(filename, chunk_size=10)
+
 
 def examplePhoSimCatalogs():
     """
@@ -44,22 +46,22 @@ def examplePhoSimCatalogs():
     obsMD = bcm.OpSim3_61DBObject()
     obs_metadata = obsMD.getObservationMetaData(88544919, 0.1, makeCircBounds=True)
     objectDict = {}
-    objectDict['testStars'] = {'dbobj':CatalogDBObject.from_objid('msstars'),
-                               'constraint':None,
-                               'filetype':'phoSim_catalog_POINT',
-                               'obsMetadata':obs_metadata}
-    objectDict['testGalaxyBulge'] = {'dbobj':CatalogDBObject.from_objid('galaxyBulge'),
-                               'constraint':"mass_bulge > 1. and sedname_bulge is not NULL",
-                               'filetype':'phoSim_catalog_SERSIC2D',
-                               'obsMetadata':obs_metadata}
-    objectDict['testGalaxyDisk'] = {'dbobj':CatalogDBObject.from_objid('galaxyDisk'),
-                               'constraint':"DiskLSSTg < 20. and sedname_disk is not NULL",
-                               'filetype':'phoSim_catalog_SERSIC2D',
-                               'obsMetadata':obs_metadata}
-    objectDict['testGalaxyAgn'] = {'dbobj':CatalogDBObject.from_objid('galaxyAgn'),
-                               'constraint':"sedname_agn is not NULL",
-                               'filetype':'phoSim_catalog_ZPOINT',
-                               'obsMetadata':obs_metadata}
+    objectDict['testStars'] = {'dbobj': CatalogDBObject.from_objid('msstars'),
+                               'constraint': None,
+                               'filetype': 'phoSim_catalog_POINT',
+                               'obsMetadata': obs_metadata}
+    objectDict['testGalaxyBulge'] = {'dbobj': CatalogDBObject.from_objid('galaxyBulge'),
+                                     'constraint': "mass_bulge > 1. and sedname_bulge is not NULL",
+                                     'filetype': 'phoSim_catalog_SERSIC2D',
+                                     'obsMetadata': obs_metadata}
+    objectDict['testGalaxyDisk'] = {'dbobj': CatalogDBObject.from_objid('galaxyDisk'),
+                                    'constraint': "DiskLSSTg < 20. and sedname_disk is not NULL",
+                                    'filetype': 'phoSim_catalog_SERSIC2D',
+                                    'obsMetadata': obs_metadata}
+    objectDict['testGalaxyAgn'] = {'dbobj': CatalogDBObject.from_objid('galaxyAgn'),
+                                   'constraint': "sedname_agn is not NULL",
+                                   'filetype': 'phoSim_catalog_ZPOINT',
+                                   'obsMetadata': obs_metadata}
 
     for objKey in objectDict.keys():
         dbobj = objectDict[objKey]['dbobj']
@@ -82,6 +84,7 @@ def examplePhoSimCatalogs():
         t.write_catalog(filename, chunk_size=10)
         print " - finished"
 
+
 def examplePhoSimNoOpSim():
     """
     This method outputs phoSim input files based on arbitrary input coordinates
@@ -91,15 +94,15 @@ def examplePhoSimNoOpSim():
 
     catalog_test_stars_aa.dat is a file created from a specified Alt, Az pointing
     """
-    raDeg= 15.
+    raDeg = 15.
     decDeg = -30.
     mjd = 51999.75
 
-    #source code for the method below is found in python.lsst.sims.catUtils.observationMetaDataUtils.py
+    # source code for the method below is found in python.lsst.sims.catUtils.observationMetaDataUtils.py
     #
-    #basically, it returns a dict of data needed by phoSim to specify a given pointing
+    # basically, it returns a dict of data needed by phoSim to specify a given pointing
     #(ra and dec of the moon, rotation of the sky relative to the telescope, etc.)
-    md =  makeObsParamsRaDecTel(math.radians(raDeg), math.radians(decDeg), mjd, 'r')
+    md = makeObsParamsRaDecTel(math.radians(raDeg), math.radians(decDeg), mjd, 'r')
 
     obs_metadata_rd = ObservationMetaData(boundType='circle',
                                           boundLength=0.1,
@@ -121,8 +124,9 @@ def examplePhoSimNoOpSim():
     t = dbobj.getCatalog('phoSim_catalog_POINT', obs_metadata= obs_metadata_aa)
     t.write_catalog('catalog_test_stars_aa.dat')
 
-def exampleAirmass(airmass,ra = 0.0, dec = 0.0, tol = 10.0, radiusDeg = 0.1,
-            makeBoxBounds=False, makeCircBounds=True):
+
+def exampleAirmass(airmass, ra = 0.0, dec = 0.0, tol = 10.0, radiusDeg = 0.1,
+                   makeBoxBounds=False, makeCircBounds=True):
     """
     This method will output a catalog of stars based on an OpSim pointing with
     a specific airmass.  It searches OpSim for pointings with the specified airmass
@@ -132,23 +136,23 @@ def exampleAirmass(airmass,ra = 0.0, dec = 0.0, tol = 10.0, radiusDeg = 0.1,
     The catalog is output to stars_airmass_test.dat
     """
 
-    obsMD=bcm.OpSim3_61DBObject()
+    obsMD = bcm.OpSim3_61DBObject()
 
-    #The code below will query the OpSim data base object created above.
-    #The query will be based on a box in RA, Dec and a specific airmass value
+    # The code below will query the OpSim data base object created above.
+    # The query will be based on a box in RA, Dec and a specific airmass value
 
-    airmassConstraint = "airmass="+str(airmass) #an SQL constraint that the airmass must be equal to
-                                                #the passed value
+    airmassConstraint = "airmass="+str(airmass)  # an SQL constraint that the airmass must be equal to
+    # the passed value
 
-    skyBounds = SpatialBounds.getSpatialBounds('box', ra, dec, tol) #bounds on region of sky
+    skyBounds = SpatialBounds.getSpatialBounds('box', ra, dec, tol)  # bounds on region of sky
 
     query = obsMD.executeConstrainedQuery(skyBounds, constraint=airmassConstraint)
 
-    #convert q into observation meta data for use in a catalog
-    obsMetaData = obsMD.getObservationMetaData(query['Opsim_obshistid'][0],radiusDeg,makeBoxBounds=makeBoxBounds,
-                   makeCircBounds=makeCircBounds)
+    # convert q into observation meta data for use in a catalog
+    obsMetaData = obsMD.getObservationMetaData(query['Opsim_obshistid'][0], radiusDeg, makeBoxBounds=makeBoxBounds,
+                                               makeCircBounds=makeCircBounds)
 
-    #create and output a reference catalog of stars based on our query to opSim
+    # create and output a reference catalog of stars based on our query to opSim
     dbobj = CatalogDBObject.from_objid('allstars')
     catalog = dbobj.getCatalog('ref_catalog_star', obs_metadata = obsMetaData)
     catalog.write_catalog('stars_airmass_test.dat')

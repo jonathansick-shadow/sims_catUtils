@@ -6,6 +6,7 @@ __all__ = ["StarBase", "StarObj", "MsStarObj", "WdStarObj", "RRLyStarObj",
            "BhbStarObj", "EbStarObj", "CepheidStarObj", "EasterEggStarObj",
            "DwarfGalStarObj"]
 
+
 class StarBase(BaseCatalogObj):
     objid = 'starbase'
     tableid = None
@@ -13,16 +14,16 @@ class StarBase(BaseCatalogObj):
     raColName = 'ra'
     decColName = 'decl'
     objectTypeId = -1
-    #Don't run test on base class
+    # Don't run test on base class
     doRunTest = False
-    #default observation metadata
+    # default observation metadata
     testObservationMetaData = ObservationMetaData(boundType='circle', pointingRA=210.0, pointingDec=-30.0,
-                                                  boundLength=0.3, mjd=52000., bandpassName='r',m5=22.0)
-    dbDefaultValues = {'varsimobjid':-1, 'runid':-1, 'ismultiple':-1, 'run':-1,
-                       'runobjid':-1}
-    #These types should be matched to the database.
+                                                  boundLength=0.3, mjd=52000., bandpassName='r', m5=22.0)
+    dbDefaultValues = {'varsimobjid': -1, 'runid': -1, 'ismultiple': -1, 'run': -1,
+                       'runobjid': -1}
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -44,9 +45,9 @@ class StarObj(StarBase):
     doRunTest = True
     testObservationMetaData = ObservationMetaData(boundType = 'circle', pointingRA=210.0, pointingDec=-30.0,
                                                   boundLength=0.1, mjd=52000., bandpassName='r', m5=22.0)
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -59,6 +60,7 @@ class StarObj(StarBase):
                ('radialVelocity', 'vrad'),
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
+
 
 class MsStarObj(StarBase):
     objid = 'msstars'
@@ -66,10 +68,10 @@ class MsStarObj(StarBase):
     objectTypeId = 5
     doRunTest = True
     testObservationMetaData = ObservationMetaData(boundType = 'circle', pointingRA=210.0, pointingDec=-30.0,
-                                                  boundLength=0.1, mjd=52000., bandpassName='r',m5=22.0)
-    #These types should be matched to the database.
+                                                  boundLength=0.1, mjd=52000., bandpassName='r', m5=22.0)
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -82,15 +84,16 @@ class MsStarObj(StarBase):
                ('radialVelocity', 'vrad'),
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
+
 
 class WdStarObj(StarBase):
     objid = 'wdstars'
     tableid = 'StarWhiteDwarf'
     objectTypeId = 6
     doRunTest = True
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -103,15 +106,16 @@ class WdStarObj(StarBase):
                ('radialVelocity', 'vrad'),
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
+
 
 class RRLyStarObj(StarBase):
     objid = 'rrlystars'
     tableid = 'StarRRLy'
     objectTypeId = 7
     doRunTest = True
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -125,14 +129,15 @@ class RRLyStarObj(StarBase):
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
 
+
 class BhbStarObj(StarBase):
     objid = 'bhbstars'
     tableid = 'StarBHB'
     objectTypeId = 8
     doRunTest = True
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -145,6 +150,7 @@ class BhbStarObj(StarBase):
                ('radialVelocity', 'vrad'),
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
+
 
 class EbStarObj(StarBase):
     objid = 'ebstars'
@@ -152,9 +158,9 @@ class EbStarObj(StarBase):
     objectTypeId = 9
     doRunTest = True
     testObservationMetaData = ObservationMetaData(mjd=52000., bandpassName='r', m5=22.0)
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -168,15 +174,16 @@ class EbStarObj(StarBase):
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
 
+
 class CepheidStarObj(StarBase):
     objid = 'cepheidstars'
     tableid = 'StarCepheid'
     objectTypeId = 10
     doRunTest = True
     testObservationMetaData = ObservationMetaData(mjd=52000., bandpassName='r', m5=22.0)
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -189,6 +196,7 @@ class CepheidStarObj(StarBase):
                ('radialVelocity', 'vrad'),
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
+
 
 class EasterEggStarObj(StarBase):
     objid = 'eastereggstars'
@@ -197,14 +205,14 @@ class EasterEggStarObj(StarBase):
     doRunTest = True
     testObservationMetaData = ObservationMetaData(mjd=52000., bandpassName='r', m5=22.0)
     dbDefaultValues = StarBase.dbDefaultValues
-    dbDefaultValues['sedid']=-1
-    dbDefaultValues['especid']=-1
-    dbDefaultValues['pop']=-1
-    dbDefaultValues['type']=-1
-    dbDefaultValues['isvar']=False
-    #These types should be matched to the database.
+    dbDefaultValues['sedid'] = -1
+    dbDefaultValues['especid'] = -1
+    dbDefaultValues['pop'] = -1
+    dbDefaultValues['type'] = -1
+    dbDefaultValues['isvar'] = False
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),
@@ -218,6 +226,7 @@ class EasterEggStarObj(StarBase):
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', unicode, 40)]
 
+
 class DwarfGalStarObj(StarBase):
     objid = 'dwarfgalstars'
     tableid = 'StarDwarfGalaxy'
@@ -225,9 +234,9 @@ class DwarfGalStarObj(StarBase):
     doRunTest = True
     testObservationMetaData = ObservationMetaData(boundType='circle', pointingRA=1.37, pointingDec=-0.1,
                                                   boundLength=0.1, mjd=52000., bandpassName='r', m5=22.0)
-    #These types should be matched to the database.
+    # These types should be matched to the database.
     #: Default map is float.  If the column mapping is the same as the column name, None can be specified
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('glon', 'gal_l*PI()/180.'),

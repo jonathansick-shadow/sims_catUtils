@@ -2,6 +2,7 @@ import numpy as np
 
 __all__ = ['SNUniverse']
 
+
 class SNUniverse(object):
     """
     Mixin Class for `lsst.sims.catalogs.measures.instances.InstanceCatalog` 
@@ -50,7 +51,7 @@ class SNUniverse(object):
         """
         self._snFrequency = value
         return self._snFrequency
-            
+
     @property
     def midSurveyTime(self):
         '''
@@ -81,8 +82,6 @@ class SNUniverse(object):
         self._midSurveyTime = mymidSurveyTime
         return self._midSurveyTime
 
-
-
     def SNCoordinatesFromHost(self, hostra, hostdec, hostz):
         '''
         Distribution of SN coordinates and velocities given a set of host
@@ -94,7 +93,7 @@ class SNUniverse(object):
         hostdec : dec of host
         hostz : redshift of host 
         '''
-        numhosts = self.numobjs 
+        numhosts = self.numobjs
 
         sndec = hostdec
         snra = hostra
@@ -106,8 +105,8 @@ class SNUniverse(object):
 
         if self.suppressHighzSN:
             snz = np.where(snz > self.maxz, np.nan, snz)
-    
-        return snra, sndec, snz , snvra, snvdec, snvr 
+
+        return snra, sndec, snz, snvra, snvdec, snvr
 
     def SNparamDistFromHost(self, hostz, hostid, hostmu):
         """
@@ -126,8 +125,9 @@ class SNUniverse(object):
 
         for i, v in enumerate(vals):
             vals[i, :] = self.drawSNParams(hostid[i], hostmu[i])
-        
+
         return vals
+
     def drawSNParams(self, hostid, hostmu):
         """
         return the SALT2 parameters c, x1, x0, t0 for a SN with a particular
@@ -141,7 +141,7 @@ class SNUniverse(object):
         """
         hostid = hostid % 4294967295
         np.random.seed(hostid)
-        t0val = self.drawFromT0Dist() 
+        t0val = self.drawFromT0Dist()
         if t0val is self.badvalues:
             return [self.badvalues]*4
         else:
@@ -150,20 +150,16 @@ class SNUniverse(object):
             x0val = self.drawFromX0Dist(x1val, cval, hostmu=hostmu)
         return [cval, x1val, x0val, t0val]
 
-
-
-                    
-            
     def drawFromx1Dist(self, **hostParams):
         """
         """
-        return np.random.normal(0. , 1.0) 
+        return np.random.normal(0., 1.0)
 
     def drawFromcDist(self, **hostParams):
         """
         """
-        return np.random.normal(0. , 0.1) 
-    
+        return np.random.normal(0., 0.1)
+
     def drawFromX0Dist(self, x1val, cval, hostmu, **hostParams):
         """
         """
@@ -177,7 +173,7 @@ class SNUniverse(object):
         sn.set(x1=x1val, c=cval)
         sn.source.set_peakmag(mag, band='bessellb', magsys='ab')
         x0val = sn.get('x0')
-        
+
         return x0val
 
     def drawFromT0Dist(self, **hostParams):
@@ -186,12 +182,12 @@ class SNUniverse(object):
 
         '''
 
-        # Will not use hostid for now, but this is there so that 
+        # Will not use hostid for now, but this is there so that
         # later on one could obtain z, hostmass etc. This is useful to obtain
         # z and host dependent SN Frequency
         hundredyear = 1.0 / self.snFrequency
-        t0val = np.random.uniform(-hundredyear / 2.0 + self.midSurveyTime, 
-                           hundredyear / 2.0 + self.midSurveyTime)
+        t0val = np.random.uniform(-hundredyear / 2.0 + self.midSurveyTime,
+                                  hundredyear / 2.0 + self.midSurveyTime)
 
         if self.suppressDimSN:
 

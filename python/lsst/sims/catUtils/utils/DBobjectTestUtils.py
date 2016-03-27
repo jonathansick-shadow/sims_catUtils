@@ -2,11 +2,12 @@ import os
 import copy
 from lsst.sims.catalogs.generation.db import CatalogDBObject
 from lsst.sims.catUtils.baseCatalogModels import StarObj, GalaxyTileObj, GalaxyAgnObj, \
-                                                 GalaxyDiskObj, GalaxyBulgeObj
+    GalaxyDiskObj, GalaxyBulgeObj
 
 __all__ = ["SearchReversion", "testGalaxyTileDBObj",
            "testGalaxyBulgeDBObj", "testGalaxyDiskDBObj", "testGalaxyAgnDBObj",
            "testStarsDBObj"]
+
 
 class SearchReversion(CatalogDBObject):
     """
@@ -21,24 +22,25 @@ class SearchReversion(CatalogDBObject):
     """
 
     def _get_column_query(self, *args, **kwargs):
-        return CatalogDBObject._get_column_query(self,*args, **kwargs)
+        return CatalogDBObject._get_column_query(self, *args, **kwargs)
 
     def _final_pass(self, *args, **kwargs):
-        return CatalogDBObject._final_pass(self,*args, **kwargs)
+        return CatalogDBObject._final_pass(self, *args, **kwargs)
 
     def query_columns(self, *args, **kwargs):
         return CatalogDBObject.query_columns(self, *args, **kwargs)
+
 
 class testGalaxyTileDBObj(SearchReversion, GalaxyTileObj):
     objid = 'testGalaxyDBObj'
     objectTypeId = 87
 
-    #The code below makes sure that we can store RA, Dec in degrees
-    #in the database but use radians in our calculations.
-    #We had to overwrite the original columns list because
-    #GalaxyTileObject class assumes that RA and Dec are stored
-    #in radians in the database.  This is a side effect of the tiling
-    #scheme used to cover the whole sky.
+    # The code below makes sure that we can store RA, Dec in degrees
+    # in the database but use radians in our calculations.
+    # We had to overwrite the original columns list because
+    # GalaxyTileObject class assumes that RA and Dec are stored
+    # in radians in the database.  This is a side effect of the tiling
+    # scheme used to cover the whole sky.
 
     columns = copy.deepcopy(GalaxyTileObj.columns)
     _to_remove = []
@@ -48,8 +50,9 @@ class testGalaxyTileDBObj(SearchReversion, GalaxyTileObj):
     for target in _to_remove:
         columns.remove(target)
 
-    columns.append(('raJ2000','ra*PI()/180.'))
-    columns.append(('decJ2000','dec*PI()/180.'))
+    columns.append(('raJ2000', 'ra*PI()/180.'))
+    columns.append(('decJ2000', 'dec*PI()/180.'))
+
 
 class testGalaxyBulgeDBObj(SearchReversion, GalaxyBulgeObj):
     """
@@ -58,12 +61,12 @@ class testGalaxyBulgeDBObj(SearchReversion, GalaxyBulgeObj):
     objid = 'testBulgeDBObj'
     objectTypeId = 88
 
-    #The code below makes sure that we can store RA, Dec in degrees
-    #in the database but use radians in our calculations.
-    #We had to overwrite the original columns list because
-    #GalaxyTileObject daughter classes assume that RA and Dec are stored
-    #in radians in the database.  This is a side effect of the tiling
-    #scheme used to cover the whole sky.
+    # The code below makes sure that we can store RA, Dec in degrees
+    # in the database but use radians in our calculations.
+    # We had to overwrite the original columns list because
+    # GalaxyTileObject daughter classes assume that RA and Dec are stored
+    # in radians in the database.  This is a side effect of the tiling
+    # scheme used to cover the whole sky.
 
     columns = copy.deepcopy(GalaxyBulgeObj.columns)
     _to_remove = []
@@ -73,19 +76,20 @@ class testGalaxyBulgeDBObj(SearchReversion, GalaxyBulgeObj):
     for target in _to_remove:
         columns.remove(target)
 
-    columns.append(('raJ2000','ra*PI()/180.'))
-    columns.append(('decJ2000','dec*PI()/180.'))
+    columns.append(('raJ2000', 'ra*PI()/180.'))
+    columns.append(('decJ2000', 'dec*PI()/180.'))
+
 
 class testGalaxyDiskDBObj(SearchReversion, GalaxyDiskObj):
     objid = 'testDiskDBObj'
     objectTypeId = 89
 
-    #The code below makes sure that we can store RA, Dec in degrees
-    #in the database but use radians in our calculations.
-    #We had to overwrite the original columns list because
-    #GalaxyTileObject daughter classes assume that RA and Dec are stored
-    #in radians in the database.  This is a side effect of the tiling
-    #scheme used to cover the whole sky.
+    # The code below makes sure that we can store RA, Dec in degrees
+    # in the database but use radians in our calculations.
+    # We had to overwrite the original columns list because
+    # GalaxyTileObject daughter classes assume that RA and Dec are stored
+    # in radians in the database.  This is a side effect of the tiling
+    # scheme used to cover the whole sky.
 
     columns = copy.deepcopy(GalaxyDiskObj.columns)
     _to_remove = []
@@ -95,19 +99,20 @@ class testGalaxyDiskDBObj(SearchReversion, GalaxyDiskObj):
     for target in _to_remove:
         columns.remove(target)
 
-    columns.append(('raJ2000','ra*PI()/180.'))
-    columns.append(('decJ2000','dec*PI()/180.'))
+    columns.append(('raJ2000', 'ra*PI()/180.'))
+    columns.append(('decJ2000', 'dec*PI()/180.'))
+
 
 class testGalaxyAgnDBObj(SearchReversion, GalaxyAgnObj):
     objid = 'testAgnDBObj'
     objectTypeId = 90
 
-    #The code below makes sure that we can store RA, Dec in degrees
-    #in the database but use radians in our calculations.
-    #We had to overwrite the original columns list because
-    #GalaxyTileObject daughter classes assume that RA and Dec are stored
-    #in radians in the database.  This is a side effect of the tiling
-    #scheme used to cover the whole sky.
+    # The code below makes sure that we can store RA, Dec in degrees
+    # in the database but use radians in our calculations.
+    # We had to overwrite the original columns list because
+    # GalaxyTileObject daughter classes assume that RA and Dec are stored
+    # in radians in the database.  This is a side effect of the tiling
+    # scheme used to cover the whole sky.
 
     columns = copy.deepcopy(GalaxyAgnObj.columns)
     _to_remove = []
@@ -117,17 +122,18 @@ class testGalaxyAgnDBObj(SearchReversion, GalaxyAgnObj):
     for target in _to_remove:
         columns.remove(target)
 
-    columns.append(('raJ2000','ra*PI()/180.'))
-    columns.append(('decJ2000','dec*PI()/180.'))
+    columns.append(('raJ2000', 'ra*PI()/180.'))
+    columns.append(('decJ2000', 'dec*PI()/180.'))
+
 
 class testStarsDBObj(SearchReversion, StarObj):
     objid = 'testStarDBObj'
     objectTypeId = 91
 
-    #The code below removes the definitions of galacticAv and magNorm
-    #from this database object.  The definitions of those columns which
-    #are implemented in StarObj rely on mathematical functions which
-    #are not defined in sqlite.
+    # The code below removes the definitions of galacticAv and magNorm
+    # from this database object.  The definitions of those columns which
+    # are implemented in StarObj rely on mathematical functions which
+    # are not defined in sqlite.
 
     columns = copy.deepcopy(StarObj.columns)
     _to_remove = []

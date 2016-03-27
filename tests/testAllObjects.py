@@ -8,9 +8,11 @@ from lsst.utils import getPackageDir
 from lsst.sims.catalogs.generation.db import CatalogDBObject
 from lsst.sims.catalogs.measures.instance import InstanceCatalog
 from lsst.sims.catUtils.exampleCatalogDefinitions import ObsStarCatalogBase
-#The following is to get the object ids in the registry
+# The following is to get the object ids in the registry
 import lsst.sims.catUtils.baseCatalogModels as bcm
-import os, inspect
+import os
+import inspect
+
 
 def failedOnFatboy(tracebackList):
     """
@@ -30,7 +32,7 @@ def failedOnFatboy(tracebackList):
         if 'sims' in item[0]:
             lastSimsDex = ix
 
-    if lastSimsDex<0:
+    if lastSimsDex < 0:
         return False
 
     if '_connect_to_engine' in tracebackList[lastSimsDex][2]:
@@ -76,7 +78,7 @@ class basicAccessTest(unittest.TestCase):
 
             obs_metadata = dbobj.testObservationMetaData
 
-            #Get results all at once
+            # Get results all at once
             try:
                 result = dbobj.query_columns(obs_metadata=obs_metadata)
             except:
@@ -94,15 +96,14 @@ class basicAccessTest(unittest.TestCase):
                 else:
                     raise
 
-
             ct_connected += 1
 
-            #Since there is only one chunck,
+            # Since there is only one chunck,
             try:
                 result = result.next()
             except StopIteration:
                 raise RuntimeError("No results for %s defined in %s"%(objname,
-                       inspect.getsourcefile(dbobj.__class__)))
+                                                                      inspect.getsourcefile(dbobj.__class__)))
             if objname.startswith('galaxy'):
                 TestCat.column_outputs = ['galid', 'raJ2000', 'decJ2000']
             else:
@@ -129,8 +130,8 @@ class basicAccessTest(unittest.TestCase):
         print 'This is just a tally so that you know how often that happened.'
         print 'successful connections: ', ct_connected
         print 'failed connections: ', ct_failed_connection
-        if len(list_of_failures)>0:
-            print 'objects that failed to connect: ',list_of_failures
+        if len(list_of_failures) > 0:
+            print 'objects that failed to connect: ', list_of_failures
 
     def testObsCat(self):
         objname = 'wdstars'
@@ -142,9 +143,9 @@ class basicAccessTest(unittest.TestCase):
             obs_metadata = dbobj.testObservationMetaData
             # To cover the central ~raft
             obs_metadata.boundLength = 0.4
-            opsMetadata = {'Opsim_rotskypos':(0., float),
-                           'pointingRA':(numpy.radians(obs_metadata.pointingRA), float),
-                           'pointingDec':(numpy.radians(obs_metadata.pointingDec), float)}
+            opsMetadata = {'Opsim_rotskypos': (0., float),
+                           'pointingRA': (numpy.radians(obs_metadata.pointingRA), float),
+                           'pointingDec': (numpy.radians(obs_metadata.pointingDec), float)}
             obs_metadata.phoSimMetaData = opsMetadata
             cat = dbobj.getCatalog('obs_star_cat', obs_metadata)
             if os.path.exists(catName):
@@ -184,6 +185,7 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
 
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit = False):
     utilsTests.run(suite(), shouldExit)

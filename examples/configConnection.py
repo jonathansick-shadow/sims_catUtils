@@ -19,8 +19,8 @@ def demoEditDefaultFile():
     Before importing baseCatalogModels, edit the default config file at:
     $SIMS_CATUTILS_DIR/config/db.py
     """
-    #after editing $SIMS_CATUTILS_DIR/CONFIG/db.py
-    #defaults will be applied at class definition during import
+    # after editing $SIMS_CATUTILS_DIR/CONFIG/db.py
+    # defaults will be applied at class definition during import
     from lsst.sims.catUtils.baseCatalogModels import SolarSystemObj
     ssmDB = SolarSystemObj()
 
@@ -35,7 +35,7 @@ def demoGlobalConfig():
                                port='51433',
                                host='localhost',
                                database='LSSTCATSIM')
-    #Can pass to the constructor
+    # Can pass to the constructor
     starDB = StarObj(**CONFIG.toDict())
 
 

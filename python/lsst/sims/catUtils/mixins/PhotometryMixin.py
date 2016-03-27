@@ -15,8 +15,8 @@ import numpy
 from collections import OrderedDict
 from lsst.utils import getPackageDir
 from lsst.sims.photUtils import Sed, Bandpass, LSSTdefaults, calcGamma, \
-                                calcMagError_m5, calcSNR_m5, PhotometricParameters, magErrorFromSNR, \
-                                BandpassDict
+    calcMagError_m5, calcSNR_m5, PhotometricParameters, magErrorFromSNR, \
+    BandpassDict
 from lsst.sims.utils import defaultSpecMap
 from lsst.sims.catalogs.measures.instance import compound
 from lsst.sims.photUtils import SedList
@@ -34,10 +34,9 @@ class PhotometryBase(object):
     on those magnitudes.
     """
 
-    #an object carrying around photometric parameters like readnoise, effective area, plate scale, etc.
-    #defaults to LSST values
+    # an object carrying around photometric parameters like readnoise, effective area, plate scale, etc.
+    # defaults to LSST values
     photParams = PhotometricParameters()
-
 
     def _cacheGamma(self, m5_names, bandpassDict):
         """
@@ -58,7 +57,6 @@ class PhotometryBase(object):
         for mm, bp in zip(m5_names, bandpassDict.values()):
             if mm not in self._gamma_cache and mm in self.obs_metadata.m5:
                 self._gamma_cache[mm] = calcGamma(bp, self.obs_metadata.m5[mm], photParams=self.photParams)
-
 
     def _magnitudeUncertaintyGetter(self, column_name_list, m5_name_list, bandpassDict_name):
         """
@@ -108,7 +106,6 @@ class PhotometryBase(object):
         bandpassDict = getattr(self, bandpassDict_name)
         self._cacheGamma(m5_name_list, bandpassDict)
 
-
         output = []
 
         for name, m5_name, bp in zip(column_name_list, m5_name_list, bandpassDict.values()):
@@ -125,16 +122,14 @@ class PhotometryBase(object):
 
                 except KeyError as kk:
                     msg = 'You got the KeyError: %s' % kk.args[0]
-                    raise KeyError('%s \n' % msg \
+                    raise KeyError('%s \n' % msg
                                    + 'Is it possible your ObservationMetaData does not have the proper\n'
                                    'm5 values defined?')
 
-
         return numpy.array(output)
 
-
-    @compound('sigma_lsst_u','sigma_lsst_g','sigma_lsst_r','sigma_lsst_i',
-              'sigma_lsst_z','sigma_lsst_y')
+    @compound('sigma_lsst_u', 'sigma_lsst_g', 'sigma_lsst_r', 'sigma_lsst_i',
+              'sigma_lsst_z', 'sigma_lsst_y')
     def get_lsst_photometric_uncertainties(self):
         """
         Getter for photometric uncertainties associated with lsst bandpasses
@@ -143,8 +138,7 @@ class PhotometryBase(object):
         return self._magnitudeUncertaintyGetter(['lsst_u', 'lsst_g', 'lsst_r',
                                                  'lsst_i', 'lsst_z', 'lsst_y'],
                                                 ['u', 'g', 'r', 'i', 'z', 'y'],
-                                                 'lsstBandpassDict')
-
+                                                'lsstBandpassDict')
 
     def calculateVisibility(self, magFilter, sigma=0.1, randomSeed=None, pre_generate_randoms=False):
         """
@@ -171,7 +165,8 @@ class PhotometryBase(object):
         if len(magFilter) == 0:
             return numpy.array([])
         # Calculate the completeness at the magnitude of each object.
-        completeness = 1.0 / (1 + numpy.exp((magFilter - self.obs_metadata.m5[self.obs_metadata.bandpass])/sigma))
+        completeness = 1.0 / \
+            (1 + numpy.exp((magFilter - self.obs_metadata.m5[self.obs_metadata.bandpass])/sigma))
         # Seed numpy if desired and not previously done.
         if (randomSeed is not None) and (not hasattr(self, 'ssm_random_seeded')):
             numpy.random.seed(randomSeed)
@@ -205,7 +200,6 @@ class PhotometryGalaxies(PhotometryBase):
             return True
         return False
 
-
     def _loadBulgeSedList(self, wavelen_match):
         """
         Load a SedList of galaxy bulge Seds.
@@ -221,21 +215,20 @@ class PhotometryGalaxies(PhotometryBase):
         internalAvList = self.column_by_name('internalAvBulge')
         cosmologicalDimming = not self._hasCosmoDistMod()
 
-        if len(sedNameList)==0:
+        if len(sedNameList) == 0:
             return numpy.ones((0))
 
         if not hasattr(self, '_bulgeSedList'):
             self._bulgeSedList = SedList(sedNameList, magNormList,
-                                               internalAvList=internalAvList,
-                                               redshiftList=redshiftList,
-                                               cosmologicalDimming=cosmologicalDimming,
-                                               wavelenMatch=wavelen_match)
+                                         internalAvList=internalAvList,
+                                         redshiftList=redshiftList,
+                                         cosmologicalDimming=cosmologicalDimming,
+                                         wavelenMatch=wavelen_match)
         else:
             self._bulgeSedList.flush()
             self._bulgeSedList.loadSedsFromList(sedNameList, magNormList,
-                                               internalAvList=internalAvList,
-                                               redshiftList=redshiftList)
-
+                                                internalAvList=internalAvList,
+                                                redshiftList=redshiftList)
 
     def _loadDiskSedList(self, wavelen_match):
         """
@@ -252,21 +245,20 @@ class PhotometryGalaxies(PhotometryBase):
         internalAvList = self.column_by_name('internalAvDisk')
         cosmologicalDimming = not self._hasCosmoDistMod()
 
-        if len(sedNameList)==0:
+        if len(sedNameList) == 0:
             return numpy.ones((0))
 
         if not hasattr(self, '_diskSedList'):
             self._diskSedList = SedList(sedNameList, magNormList,
-                                               internalAvList=internalAvList,
-                                               redshiftList=redshiftList,
-                                               cosmologicalDimming=cosmologicalDimming,
-                                               wavelenMatch=wavelen_match)
+                                        internalAvList=internalAvList,
+                                        redshiftList=redshiftList,
+                                        cosmologicalDimming=cosmologicalDimming,
+                                        wavelenMatch=wavelen_match)
         else:
             self._diskSedList.flush()
             self._diskSedList.loadSedsFromList(sedNameList, magNormList,
                                                internalAvList=internalAvList,
                                                redshiftList=redshiftList)
-
 
     def _loadAgnSedList(self, wavelen_match):
         """
@@ -282,19 +274,18 @@ class PhotometryGalaxies(PhotometryBase):
         redshiftList = self.column_by_name('redshift')
         cosmologicalDimming = not self._hasCosmoDistMod()
 
-        if len(sedNameList)==0:
+        if len(sedNameList) == 0:
             return numpy.ones((0))
 
         if not hasattr(self, '_agnSedList'):
             self._agnSedList = SedList(sedNameList, magNormList,
-                                               redshiftList=redshiftList,
-                                               cosmologicalDimming=cosmologicalDimming,
-                                               wavelenMatch=wavelen_match)
+                                       redshiftList=redshiftList,
+                                       cosmologicalDimming=cosmologicalDimming,
+                                       wavelenMatch=wavelen_match)
         else:
             self._agnSedList.flush()
             self._agnSedList.loadSedsFromList(sedNameList, magNormList,
-                                               redshiftList=redshiftList)
-
+                                              redshiftList=redshiftList)
 
     def sum_magnitudes(self, disk = None, bulge = None, agn = None):
         """
@@ -313,7 +304,7 @@ class PhotometryGalaxies(PhotometryBase):
         if not isinstance(disk, type(None)):
             baselineType = type(disk)
             if baselineType == numpy.ndarray:
-                elements=len(disk)
+                elements = len(disk)
 
         if not isinstance(bulge, type(None)):
             if baselineType == type(None):
@@ -363,13 +354,12 @@ class PhotometryGalaxies(PhotometryBase):
             # http://stackoverflow.com/questions/25087769/runtimewarning-divide-by-zero-error-how-to-avoid-python-numpy
             # we will still get a divide by zero error from log10, but numpy.where will be
             # circumventing the offending value, so it is probably okay
-            return numpy.where(nn>tol, -2.5*numpy.log10(nn) + mm_0, numpy.NaN)
+            return numpy.where(nn > tol, -2.5*numpy.log10(nn) + mm_0, numpy.NaN)
         else:
-            if nn>tol:
+            if nn > tol:
                 return -2.5*numpy.log10(nn) + mm_0
             else:
                 return numpy.NaN
-
 
     def _magnitudeGetter(self, componentName, bandpassDict, columnNameList):
         """
@@ -414,7 +404,7 @@ class PhotometryGalaxies(PhotometryBase):
             else:
                 sedList = self._agnSedList
         else:
-            raise RuntimeError('_magnitudeGetter does not understand component %s ' \
+            raise RuntimeError('_magnitudeGetter does not understand component %s '
                                % componentName)
 
         if sedList is None:
@@ -424,9 +414,9 @@ class PhotometryGalaxies(PhotometryBase):
 
         if self._hasCosmoDistMod():
             cosmoDistMod = self.column_by_name('cosmologicalDistanceModulus')
-            if len(cosmoDistMod)>0:
-               for ix in range(magnitudes.shape[0]):
-                   magnitudes[ix] += cosmoDistMod
+            if len(cosmoDistMod) > 0:
+                for ix in range(magnitudes.shape[0]):
+                    magnitudes[ix] += cosmoDistMod
 
         for ix, columnName in enumerate(columnNameList):
             if indices is None or ix in indices:
@@ -437,7 +427,6 @@ class PhotometryGalaxies(PhotometryBase):
 
         return magnitudes
 
-
     @compound('sigma_uBulge', 'sigma_gBulge', 'sigma_rBulge',
               'sigma_iBulge', 'sigma_zBulge', 'sigma_yBulge')
     def get_photometric_uncertainties_bulge(self):
@@ -446,10 +435,9 @@ class PhotometryGalaxies(PhotometryBase):
         """
 
         return self._magnitudeUncertaintyGetter(['uBulge', 'gBulge', 'rBulge',
-                                                'iBulge', 'zBulge', 'yBulge'],
+                                                 'iBulge', 'zBulge', 'yBulge'],
                                                 ['u', 'g', 'r', 'i', 'z', 'y'],
                                                 'lsstBandpassDict')
-
 
     @compound('sigma_uDisk', 'sigma_gDisk', 'sigma_rDisk',
               'sigma_iDisk', 'sigma_zDisk', 'sigma_yDisk')
@@ -459,10 +447,9 @@ class PhotometryGalaxies(PhotometryBase):
         """
 
         return self._magnitudeUncertaintyGetter(['uDisk', 'gDisk', 'rDisk',
-                                                'iDisk', 'zDisk', 'yDisk'],
+                                                 'iDisk', 'zDisk', 'yDisk'],
                                                 ['u', 'g', 'r', 'i', 'z', 'y'],
                                                 'lsstBandpassDict')
-
 
     @compound('sigma_uAgn', 'sigma_gAgn', 'sigma_rAgn',
               'sigma_iAgn', 'sigma_zAgn', 'sigma_yAgn')
@@ -472,10 +459,9 @@ class PhotometryGalaxies(PhotometryBase):
         """
 
         return self._magnitudeUncertaintyGetter(['uAgn', 'gAgn', 'rAgn',
-                                                'iAgn', 'zAgn', 'yAgn'],
+                                                 'iAgn', 'zAgn', 'yAgn'],
                                                 ['u', 'g', 'r', 'i', 'z', 'y'],
                                                 'lsstBandpassDict')
-
 
     @compound('uBulge', 'gBulge', 'rBulge', 'iBulge', 'zBulge', 'yBulge')
     def get_lsst_bulge_mags(self):
@@ -490,17 +476,15 @@ class PhotometryGalaxies(PhotometryBase):
         # totally optional; list the indices in self.lsstBandpassDict
         # of the columns which will actually be output (so that we don't
         # spend time calculating things we do not need)
-        indices = [ii for ii, name in enumerate(self.get_lsst_bulge_mags._colnames) \
+        indices = [ii for ii, name in enumerate(self.get_lsst_bulge_mags._colnames)
                    if name in self._actually_calculated_columns]
 
-        if len(indices)==6:
+        if len(indices) == 6:
             indices = None
 
         # actually calculate the magnitudes
         return self._magnitudeGetter('bulge', self.lsstBandpassDict,
                                      self.get_lsst_bulge_mags._colnames)
-
-
 
     @compound('uDisk', 'gDisk', 'rDisk', 'iDisk', 'zDisk', 'yDisk')
     def get_lsst_disk_mags(self):
@@ -515,16 +499,15 @@ class PhotometryGalaxies(PhotometryBase):
         # totally optional; list the indices in self.lsstBandpassDict
         # of the columns which will actually be output (so that we don't
         # spend time calculating things we do not need)
-        indices = [ii for ii, name in enumerate(self.get_lsst_disk_mags._colnames) \
+        indices = [ii for ii, name in enumerate(self.get_lsst_disk_mags._colnames)
                    if name in self._actually_calculated_columns]
 
-        if len(indices)==6:
+        if len(indices) == 6:
             indices = None
 
         # actually calculate the magnitudes
         return self._magnitudeGetter('disk', self.lsstBandpassDict,
                                      self.get_lsst_disk_mags._colnames)
-
 
     @compound('uAgn', 'gAgn', 'rAgn', 'iAgn', 'zAgn', 'yAgn')
     def get_lsst_agn_mags(self):
@@ -539,16 +522,15 @@ class PhotometryGalaxies(PhotometryBase):
         # totally optional; list the indices in self.lsstBandpassDict
         # of the columns which will actually be output (so that we don't
         # spend time calculating things we do not need)
-        indices = [ii for ii, name in enumerate(self.get_lsst_agn_mags._colnames) \
+        indices = [ii for ii, name in enumerate(self.get_lsst_agn_mags._colnames)
                    if name in self._actually_calculated_columns]
 
-        if len(indices)==6:
+        if len(indices) == 6:
             indices = None
 
         # actually calculate the magnitudes
         return self._magnitudeGetter('agn', self.lsstBandpassDict,
                                      self.get_lsst_agn_mags._colnames)
-
 
     @compound('lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y')
     def get_lsst_total_mags(self):
@@ -578,8 +560,6 @@ class PhotometryGalaxies(PhotometryBase):
         return numpy.array(output)
 
 
-
-
 class PhotometryStars(PhotometryBase):
     """
     This mixin provides the infrastructure for doing photometry on stars
@@ -599,18 +579,17 @@ class PhotometryStars(PhotometryBase):
         magNormList = self.column_by_name('magNorm')
         galacticAvList = self.column_by_name('galacticAv')
 
-        if len(sedNameList)==0:
+        if len(sedNameList) == 0:
             return numpy.ones((0))
 
         if not hasattr(self, '_sedList'):
             self._sedList = SedList(sedNameList, magNormList,
-                                         galacticAvList=galacticAvList,
-                                         wavelenMatch=wavelen_match)
+                                    galacticAvList=galacticAvList,
+                                    wavelenMatch=wavelen_match)
         else:
             self._sedList.flush()
             self._sedList.loadSedsFromList(sedNameList, magNormList,
-                                          galacticAvList=galacticAvList)
-
+                                           galacticAvList=galacticAvList)
 
     def _magnitudeGetter(self, bandpassDict, columnNameList, indices=None):
         """
@@ -637,11 +616,10 @@ class PhotometryStars(PhotometryBase):
         if len(indices) == len(columnNameList):
             indices = None
 
-
         self._loadSedList(bandpassDict.wavelenMatch)
 
         if not hasattr(self, '_sedList'):
-            magnitudes = numpy.ones((len(columnNameList),0))
+            magnitudes = numpy.ones((len(columnNameList), 0))
         else:
             magnitudes = bandpassDict.magListForSedList(self._sedList, indices=indices).transpose()
 
@@ -654,8 +632,7 @@ class PhotometryStars(PhotometryBase):
 
         return magnitudes
 
-
-    @compound('lsst_u','lsst_g','lsst_r','lsst_i','lsst_z','lsst_y')
+    @compound('lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y')
     def get_lsst_magnitudes(self):
         """
         getter for LSST stellar magnitudes
@@ -717,11 +694,11 @@ class PhotometrySSM(PhotometryBase):
         sedNameList = self.column_by_name('sedFilename')
         magNormList = self.column_by_name('magNorm')
 
-        if len(sedNameList)==0:
+        if len(sedNameList) == 0:
             # need to return something when InstanceCatalog goes through
             # it's "dry run" to determine what columns are required from
             # the database
-            return numpy.zeros((len(bandpassDict.keys()),0))
+            return numpy.zeros((len(bandpassDict.keys()), 0))
 
         magListOut = []
 
@@ -742,8 +719,7 @@ class PhotometrySSM(PhotometryBase):
 
         return numpy.array(magListOut).transpose()
 
-
-    @compound('lsst_u','lsst_g','lsst_r','lsst_i','lsst_z','lsst_y')
+    @compound('lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y')
     def get_lsst_magnitudes(self):
         """
         getter for LSST magnitudes of solar system objects
@@ -752,7 +728,6 @@ class PhotometrySSM(PhotometryBase):
             self.lsstBandpassDict = BandpassDict.loadTotalBandpassesFromFiles()
 
         return self._magnitudeGetter(self.lsstBandpassDict, self.get_lsst_magnitudes._colnames)
-
 
     def get_magFilter(self):
         """
@@ -792,7 +767,6 @@ class PhotometrySSM(PhotometryBase):
         visibility = self.calculateVisibility(magObj, randomSeed=mjdSeed, pre_generate_randoms=True)
         return visibility
 
-
     @compound('dmagTrailing', 'dmagDetection')
     def get_ssm_dmag(self):
         """
@@ -811,10 +785,10 @@ class PhotometrySSM(PhotometryBase):
                                "Your catalog's ObservationMetaData does not "
                                "specify seeing.")
 
-        if len(self.obs_metadata.seeing)>1:
+        if len(self.obs_metadata.seeing) > 1:
             valueList = self.obs_metadata.seeing.values()
             for ix in range(1, len(valueList)):
-                if numpy.abs(valueList[ix]-valueList[0])>0.0001:
+                if numpy.abs(valueList[ix]-valueList[0]) > 0.0001:
 
                     raise RuntimeError("dmagTrailing/dmagDetection calculation is confused. "
                                        "Your catalog's ObservationMetaData contains multiple "
@@ -825,23 +799,24 @@ class PhotometrySSM(PhotometryBase):
                                "Your catalog does not have an associated PhotometricParameters "
                                "member variable.  It is impossible to know what the exposure time is.")
 
-        dradt = self.column_by_name('velRa') # in radians per day (actual sky velocity;
-                                             # i.e., no need to divide by cos(dec))
+        dradt = self.column_by_name('velRa')  # in radians per day (actual sky velocity;
+        # i.e., no need to divide by cos(dec))
 
-        ddecdt = self.column_by_name('velDec') # in radians per day
+        ddecdt = self.column_by_name('velDec')  # in radians per day
 
-        if len(dradt)==0:
-            return numpy.zeros((2,0))
+        if len(dradt) == 0:
+            return numpy.zeros((2, 0))
 
         a_trail = 0.76
         b_trail = 1.16
         a_det = 0.42
         b_det = 0.00
-        seeing = self.obs_metadata.seeing[self.obs_metadata.bandpass] # this will be in arcsec
+        seeing = self.obs_metadata.seeing[self.obs_metadata.bandpass]  # this will be in arcsec
         texp = self.photParams.nexp*self.photParams.exptime  # in seconds
-        velocity = numpy.sqrt(numpy.power(numpy.degrees(dradt),2) + numpy.power(numpy.degrees(ddecdt),2)) # in degrees/day
+        velocity = numpy.sqrt(numpy.power(numpy.degrees(dradt), 2) +
+                              numpy.power(numpy.degrees(ddecdt), 2))  # in degrees/day
         x = velocity*texp/(24.0*seeing)
-        xsq = numpy.power(x,2)
+        xsq = numpy.power(x, 2)
         dmagTrail = 1.25*numpy.log10(1.0 + a_trail * xsq/(1.0+b_trail*x))
         dmagDetect = 1.25*numpy.log10(1.0 + a_det * xsq/(1.0 + b_det*x))
 

@@ -6,8 +6,8 @@ from lsst.sims.utils import ObservationMetaData, _observedFromICRS
 from lsst.sims.utils import haversine, arcsecFromRadians
 from lsst.sims.catUtils.mixins import PhoSimAstrometryBase
 
-class DePrecessionTest(unittest.TestCase):
 
+class DePrecessionTest(unittest.TestCase):
 
     def test_de_precession(self):
         """
@@ -45,7 +45,7 @@ class DePrecessionTest(unittest.TestCase):
 
         raDecTransformed = PhoSimAstrometryBase()._dePrecess(ra_list, dec_list, obs)
         dd = arcsecFromRadians(haversine(np.radians(pra), np.radians(pdec),
-                                          raDecTransformed[0][0], raDecTransformed[1][0]))
+                                         raDecTransformed[0][0], raDecTransformed[1][0]))
         self.assertLess(dd, 1.0e-6)
         dd0 = arcsecFromRadians(haversine(raObs[0], decObs[0], np.radians(pra), np.radians(pdec)))
         self.assertLess(dd, dd0)
@@ -60,15 +60,15 @@ class DePrecessionTest(unittest.TestCase):
                     self.assertAlmostEqual(dd1, dd2, delta=6)
 
 
-
 def suite():
     utilsTests.init()
     suites = []
     suites += unittest.makeSuite(DePrecessionTest)
     return unittest.TestSuite(suites)
 
+
 def run(shouldExit=False):
-    utilsTests.run(suite(),shouldExit)
+    utilsTests.run(suite(), shouldExit)
 
 if __name__ == "__main__":
     run(True)

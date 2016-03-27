@@ -1,4 +1,4 @@
-config.driver='mssql+pymssql'
-config.host='localhost'
-config.port='51433'
-config.database='LSSTCATSIM'
+config.driver = 'mssql+pymssql'
+config.host = 'localhost'
+config.port = '51433'
+config.database = 'LSSTCATSIM'

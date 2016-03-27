@@ -12,20 +12,23 @@ from lsst.sims.catUtils.mixins import PhotometryStars, PhotometryGalaxies
 from lsst.sims.catUtils.utils import setupPhotometryCatalog
 from lsst.sims.catUtils.utils import makeStarDatabase, makeGalaxyDatabase
 
+
 class testStarCatalog(InstanceCatalog, AstrometryStars, PhotometryStars):
     """
     A class with no photometry columns.  Meant to be passed to setupPhotometryCatalog
     where it will be given photometry columns
     """
     column_outputs = ['raObserved', 'decObserved']
-    default_formats = {'f':'%.12e'}
+    default_formats = {'f': '%.12e'}
+
 
 class baselineStarCatalog(InstanceCatalog, AstrometryStars, PhotometryStars):
     """
     Baseline photometry catalog against which to compare testStarCatalog
     """
     column_outputs = ['raObserved', 'decObserved']
-    default_formats = {'f':'%.12e'}
+    default_formats = {'f': '%.12e'}
+
 
 class testGalaxyCatalog(InstanceCatalog, AstrometryGalaxies, PhotometryGalaxies):
     """
@@ -33,14 +36,16 @@ class testGalaxyCatalog(InstanceCatalog, AstrometryGalaxies, PhotometryGalaxies)
     where it will be given photometry columns
     """
     column_outputs = ['raObserved', 'decObserved']
-    default_formats = {'f':'%.12e'}
+    default_formats = {'f': '%.12e'}
+
 
 class baselineGalaxyCatalog(InstanceCatalog, AstrometryGalaxies, PhotometryGalaxies):
     """
     Baseline photometry catalog against which to compare testGalaxyCatalog
     """
     column_outputs = ['raObserved', 'decObserved']
-    default_formats = {'f':'%.12e'}
+    default_formats = {'f': '%.12e'}
+
 
 class testStarDBObject(CatalogDBObject):
     """
@@ -51,7 +56,7 @@ class testStarDBObject(CatalogDBObject):
     raColName = 'ra'
     decColName = 'decl'
     objectTypeId = 49
-    columns = [('id','simobjid', int),
+    columns = [('id', 'simobjid', int),
                ('raJ2000', 'ra*PI()/180.'),
                ('decJ2000', 'decl*PI()/180.'),
                ('magNorm', None),
@@ -62,6 +67,7 @@ class testStarDBObject(CatalogDBObject):
                ('radialVelocity', 'vrad'),
                ('variabilityParameters', 'varParamStr', str, 256),
                ('sedFilename', 'sedfilename', str, 40)]
+
 
 class testGalaxyDBObject(CatalogDBObject):
 
@@ -74,48 +80,49 @@ class testGalaxyDBObject(CatalogDBObject):
     objectTypeId = 51
 
     columns = [('galtileid', None, numpy.int64),
-            ('galid', None, str, 30),
-            ('raJ2000', 'ra*PI()/180.'),
-            ('decJ2000', 'dec*PI()/180.'),
-            ('raJ2000Bulge', 'bra*PI()/180.'),
-            ('decJ2000Bulge', 'bdec*PI()/180.'),
-            ('raJ2000Disk', 'dra*PI()/180.'),
-            ('decJ2000Disk', 'ddec*PI()/180.'),
-            ('raJ2000Agn', 'agnra*PI()/180.'),
-            ('decJ2000Agn', 'agndec*PI()/180.'),
-            ('magNormBulge', 'magnorm_bulge'),
-            ('magNormDisk', 'magnorm_disk'),
-            ('magNormAgn', 'magnorm_agn'),
-            ('sedFilenameBulge', 'sedname_bulge', unicode, 40),
-            ('sedFilenameDisk', 'sedname_disk', unicode, 40),
-            ('sedFilenameAgn', 'sedname_agn', unicode, 40),
-            ('majorAxisBulge', 'a_b*PI()/648000.'),
-            ('minorAxisBulge', 'b_b*PI()/648000.'),
-            ('positionAngleBulge', 'pa_bulge*PI()/180.'),
-            ('sindexBulge', 'bulge_n', int),
-            ('majorAxisDisk', 'a_d*PI()/648000.'),
-            ('minorAxisDisk', 'b_d*PI()/648000.'),
-            ('positionAngleDisk', 'pa_disk*PI()/180.'),
-            ('sindexDisk', 'disk_n', int),
-            ('internalExtinctionModelBulge', 'ext_model_b', str, 3),
-            ('internalAvBulge', 'av_b'),
-            ('internalRvBulge', 'rv_b'),
-            ('internalExtinctionModelDisk', 'ext_model_d', str, 3),
-            ('internalAvDisk', 'av_d'),
-            ('internalRvDisk', 'rv_d'),
-            ('lsst_u', 'u_ab'),
-            ('lsst_g', 'g_ab'),
-            ('lsst_r', 'r_ab'),
-            ('lsst_i', 'i_ab'),
-            ('lsst_z', 'z_ab'),
-            ('lsst_y', 'y_ab')]
+               ('galid', None, str, 30),
+               ('raJ2000', 'ra*PI()/180.'),
+               ('decJ2000', 'dec*PI()/180.'),
+               ('raJ2000Bulge', 'bra*PI()/180.'),
+               ('decJ2000Bulge', 'bdec*PI()/180.'),
+               ('raJ2000Disk', 'dra*PI()/180.'),
+               ('decJ2000Disk', 'ddec*PI()/180.'),
+               ('raJ2000Agn', 'agnra*PI()/180.'),
+               ('decJ2000Agn', 'agndec*PI()/180.'),
+               ('magNormBulge', 'magnorm_bulge'),
+               ('magNormDisk', 'magnorm_disk'),
+               ('magNormAgn', 'magnorm_agn'),
+               ('sedFilenameBulge', 'sedname_bulge', unicode, 40),
+               ('sedFilenameDisk', 'sedname_disk', unicode, 40),
+               ('sedFilenameAgn', 'sedname_agn', unicode, 40),
+               ('majorAxisBulge', 'a_b*PI()/648000.'),
+               ('minorAxisBulge', 'b_b*PI()/648000.'),
+               ('positionAngleBulge', 'pa_bulge*PI()/180.'),
+               ('sindexBulge', 'bulge_n', int),
+               ('majorAxisDisk', 'a_d*PI()/648000.'),
+               ('minorAxisDisk', 'b_d*PI()/648000.'),
+               ('positionAngleDisk', 'pa_disk*PI()/180.'),
+               ('sindexDisk', 'disk_n', int),
+               ('internalExtinctionModelBulge', 'ext_model_b', str, 3),
+               ('internalAvBulge', 'av_b'),
+               ('internalRvBulge', 'rv_b'),
+               ('internalExtinctionModelDisk', 'ext_model_d', str, 3),
+               ('internalAvDisk', 'av_d'),
+               ('internalRvDisk', 'rv_d'),
+               ('lsst_u', 'u_ab'),
+               ('lsst_g', 'g_ab'),
+               ('lsst_r', 'r_ab'),
+               ('lsst_i', 'i_ab'),
+               ('lsst_z', 'z_ab'),
+               ('lsst_y', 'y_ab')]
+
 
 class InstanceCatalogSetupUnittest(unittest.TestCase):
 
     def setUp(self):
         self.driver = 'sqlite'
         self.StarDBName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
-                                      'testSetup_setupTestStars.db')
+                                       'testSetup_setupTestStars.db')
 
         self.GalaxyDBName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
                                          'testSetup_setupTestGalaxies.db')
@@ -134,7 +141,6 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
                          pointingDec=self.pointingDec,
                          radius=self.radius)
 
-
         makeGalaxyDatabase(filename=self.GalaxyDBName, size=100,
                            pointingRA=self.pointingRA,
                            pointingDec=self.pointingDec,
@@ -152,7 +158,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         self.obs_metadata_compound = ObservationMetaData(pointingRA=self.pointingRA,
                                                          pointingDec=self.pointingDec,
                                                          boundType='circle', boundLength=self.radius,
-                                                         bandpassName=['g','i'], mjd=57000.0,
+                                                         bandpassName=['g', 'i'], mjd=57000.0,
                                                          m5=[24.5, 17.5])
 
     def tearDown(self):
@@ -177,6 +183,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         """
 
         class dummyClass(object):
+
             def __init__(self):
                 pass
 
@@ -190,14 +197,13 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         self.assertRaises(RuntimeError, setupPhotometryCatalog, obs_metadata=self.obs_metadata,
                           dbConnection=self.starDBObj, catalogClass=dummyClass)
 
-
     def testSetupPhotometry(self):
         """
         Make sure that catalogs instantiated by setupPhotometryCatalog contain the
         correct columns.
         """
 
-        #test case with a single bandpass
+        # test case with a single bandpass
         cat = setupPhotometryCatalog(obs_metadata=self.obs_metadata, dbConnection=self.starDBObj,
                                      catalogClass=testStarCatalog)
 
@@ -230,7 +236,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         self.assertFalse('sigma_lsst_z' in cat.iter_column_names())
         self.assertFalse('sigma_lsst_y' in cat.iter_column_names())
 
-        #test case with two bandpasses
+        # test case with two bandpasses
         cat = setupPhotometryCatalog(obs_metadata=self.obs_metadata_compound,
                                      dbConnection=self.starDBObj, catalogClass=testStarCatalog)
 
@@ -264,7 +270,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         self.assertFalse('sigma_lsst_z' in cat.iter_column_names())
         self.assertFalse('sigma_lsst_y' in cat.iter_column_names())
 
-        #make sure that class default columns did not get overwritten
+        # make sure that class default columns did not get overwritten
         cat = testStarCatalog(self.starDBObj, obs_metadata=self.obs_metadata)
 
         self.assertFalse('lsst_u' in cat.iter_column_names())
@@ -273,8 +279,6 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         self.assertFalse('lsst_i' in cat.iter_column_names())
         self.assertFalse('lsst_z' in cat.iter_column_names())
         self.assertFalse('lsst_y' in cat.iter_column_names())
-
-
 
     def testActualCatalog(self):
         """
@@ -293,7 +297,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
                                                   column_outputs=['lsst_g', 'sigma_lsst_g', 'lsst_i', 'sigma_lsst_i']))
 
         testName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
-                               'testSetUp_testActual_testSetupCat.txt')
+                                'testSetUp_testActual_testSetupCat.txt')
 
         baseName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
                                 'testSetUp_testActual_baseSetupCat.txt')
@@ -304,7 +308,6 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         if os.path.exists(baseName):
             os.unlink(baseName)
 
-
         basedtype = numpy.dtype([('raObserved', numpy.float), ('decObserved', numpy.float),
                                  ('lsst_g', numpy.float), ('sigma_lsst_g', numpy.float),
                                  ('lsst_i', numpy.float), ('sigma_lsst_i', numpy.float)])
@@ -312,12 +315,11 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         for (testCatClass, dbo, baselineCat, msgr) in zip(testCatClasses, testCatDBs, baselineCats, msgroot):
 
             testdtype = numpy.dtype([('raObserved', numpy.float), ('decObserved', numpy.float),
-                                 ('lsst_g', numpy.float)])
-
+                                     ('lsst_g', numpy.float)])
 
             testCat = setupPhotometryCatalog(obs_metadata=self.obs_metadata,
-                                              dbConnection=dbo,
-                                              catalogClass=testCatClass)
+                                             dbConnection=dbo,
+                                             catalogClass=testCatClass)
 
             testCat.write_catalog(testName)
             baselineCat.write_catalog(baseName)
@@ -331,9 +333,9 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
             for b, t in zip(baseData, testData):
                 self.assertAlmostEqual(b['lsst_g'], t['lsst_g'], 12,
                                        msg = '%s single column; %.12e != %.12e' % (msgr, b['lsst_g'], t['lsst_g']))
-                ct +=1
+                ct += 1
 
-            self.assertTrue(ct>0)
+            self.assertTrue(ct > 0)
 
             testdtype = numpy.dtype([('raObserved', numpy.float), ('decObserved', numpy.float),
                                      ('lsst_g', numpy.float), ('lsst_i', numpy.float)])
@@ -352,7 +354,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
                                        msg = '%s double column; %.12e != %.12e ' % (msgr, b['lsst_i'], t['lsst_i']))
                 ct += 1
 
-            self.assertTrue(ct>0)
+            self.assertTrue(ct > 0)
 
             if os.path.exists(testName):
                 os.unlink(testName)
@@ -371,9 +373,9 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
         testCatDBs = [self.starDBObj, self.galaxyDBObj]
         baselineCats = []
 
-        #need to set up the baseline catalogs with the compound obs_metadata so that they get the
-        #correct m5 values for both magnitudes (otherwise, they will use LSST defaults, which
-        #disagree with our cartoon test case)
+        # need to set up the baseline catalogs with the compound obs_metadata so that they get the
+        # correct m5 values for both magnitudes (otherwise, they will use LSST defaults, which
+        # disagree with our cartoon test case)
         baselineCats.append(baselineStarCatalog(self.starDBObj, obs_metadata=self.obs_metadata_compound,
                                                 column_outputs=['lsst_g', 'lsst_i', 'sigma_lsst_g', 'sigma_lsst_i']))
 
@@ -384,7 +386,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
                                 'testSetup_testSetupCatUncertainty.txt')
 
         baseName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
-                               'testSetup_baseSetupCatUncertainty.txt')
+                                'testSetup_baseSetupCatUncertainty.txt')
 
         if os.path.exists(testName):
             os.unlink(testName)
@@ -394,7 +396,7 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
 
         basedtype = numpy.dtype([('raObserved', numpy.float), ('decObserved', numpy.float),
                                  ('lsst_g', numpy.float), ('lsst_i', numpy.float),
-                                 ('sigma_lsst_g',numpy.float), ('sigma_lsst_i', numpy.float)])
+                                 ('sigma_lsst_g', numpy.float), ('sigma_lsst_i', numpy.float)])
 
         for (testCatClass, dbo, baselineCat, msgr) in zip(testCatClasses, testCatDBs, baselineCats, msgroot):
 
@@ -420,9 +422,9 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
                                        msg = '%s single column; %.12e != %.12e ' % (msgr, b['lsst_g'], t['lsst_g']))
                 self.assertAlmostEqual(b['sigma_lsst_g'], t['sigma_lsst_g'], 12,
                                        msg = '%s sigle column; %.12e != %.12e ' % (msgr, b['sigma_lsst_i'], t['sigma_lsst_g']))
-                ct +=1
+                ct += 1
 
-            self.assertTrue(ct>0)
+            self.assertTrue(ct > 0)
 
             testdtype = numpy.dtype([('raObserved', numpy.float), ('decObserved', numpy.float),
                                      ('lsst_g', numpy.float), ('sigma_lsst_g', numpy.float),
@@ -445,14 +447,15 @@ class InstanceCatalogSetupUnittest(unittest.TestCase):
                                        msg = '%s double column; %.12e != %.12e ' % (msgr, b['sigma_lsst_g'], t['lsst_g']))
                 self.assertAlmostEqual(b['sigma_lsst_i'], t['sigma_lsst_i'], 12,
                                        msg = '%s double column; %.12e != %.12e ' % (msgr, b['sigma_lsst_i'], t['sigma_lsst_i']))
-                ct +=1
+                ct += 1
 
-            self.assertTrue(ct>0)
+            self.assertTrue(ct > 0)
 
             if os.path.exists(testName):
                 os.unlink(testName)
             if os.path.exists(baseName):
                 os.unlink(baseName)
+
 
 def suite():
     utilsTests.init()
@@ -460,8 +463,9 @@ def suite():
     suites += unittest.makeSuite(InstanceCatalogSetupUnittest)
     return unittest.TestSuite(suites)
 
+
 def run(shouldExit = False):
-    utilsTests.run(suite(),shouldExit)
+    utilsTests.run(suite(), shouldExit)
 
 if __name__ == "__main__":
     run(True)

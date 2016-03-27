@@ -1,11 +1,12 @@
 import warnings
 import os
-from lsst.sims.catalogs.generation.db import CatalogDBObject,  ChunkIterator
+from lsst.sims.catalogs.generation.db import CatalogDBObject, ChunkIterator
 from sqlalchemy.sql import select, func, column
 import lsst.pex.config as pexConfig
 from lsst.utils import getPackageDir
 
 __all__ = ["BaseCatalogObj", "BaseCatalogConfig"]
+
 
 class BaseCatalogConfig(pexConfig.Config):
     host = pexConfig.Field(
@@ -29,6 +30,7 @@ class BaseCatalogConfig(pexConfig.Config):
         default = "mssql+pymssql",
     )
 
+
 class BaseCatalogObj(CatalogDBObject):
     """Base class for Catalogs that query the default
     UW CATSIM database
@@ -36,7 +38,7 @@ class BaseCatalogObj(CatalogDBObject):
 
     config = BaseCatalogConfig()
 
-    #load $SIMS_CATUTILS_DIR/config/db.py
+    # load $SIMS_CATUTILS_DIR/config/db.py
     config.load(os.path.join(getPackageDir("sims_catUtils"), "config", "db.py"))
 
     host = config.host
@@ -97,17 +99,17 @@ class BaseCatalogObj(CatalogDBObject):
                           "if the database is large")
 
         if obs_metadata is not None and regionStr is not None:
-            #add spatial constraints to query.
+            # add spatial constraints to query.
 
-            #Hint sql engine to seek on htmid
+            # Hint sql engine to seek on htmid
             if not self.tableid.endswith('forceseek'):
                 query = query.with_hint(self.table, ' WITH(FORCESEEK)', 'mssql')
 
-            #aliased subquery for htmid ranges covering the search region
+            # aliased subquery for htmid ranges covering the search region
             htmid_range_alias = select([column('htmidstart'), column('htmidend')]).\
-            select_from(func.fHtmCoverRegion(regionStr)).alias()
+                select_from(func.fHtmCoverRegion(regionStr)).alias()
 
-            #SQL is not case sensitive but python is:
+            # SQL is not case sensitive but python is:
             if 'htmID' in self.columnMap:
                 htmidName = 'htmID'
             elif 'htmid' in self.columnMap:
@@ -115,14 +117,13 @@ class BaseCatalogObj(CatalogDBObject):
             else:
                 htmidName = 'htmId'
 
-            #Range join on htmid ranges
+            # Range join on htmid ranges
             query = query.join(htmid_range_alias,
-                       self.table.c[htmidName].between(htmid_range_alias.c.htmidstart,
-                                                     htmid_range_alias.c.htmidend)
-                       )
+                               self.table.c[htmidName].between(htmid_range_alias.c.htmidstart,
+                                                               htmid_range_alias.c.htmidend)
+                               )
             query = query.filter(func.sph.fRegionContainsXYZ(func.sph.fSimplifyString(regionStr),
-                     self.table.c.cx, self.table.c.cy, self.table.c.cz) == 1)
-
+                                                             self.table.c.cx, self.table.c.cy, self.table.c.cz) == 1)
 
         if constraint is not None:
             query = query.filter(constraint)

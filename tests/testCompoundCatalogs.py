@@ -5,28 +5,29 @@ from lsst.utils import getPackageDir
 
 from lsst.sims.utils import ObservationMetaData
 from lsst.sims.catUtils.baseCatalogModels import GalaxyBulgeObj, GalaxyDiskObj, \
-                                                 GalaxyAgnObj, GalaxyTileCompoundObj, \
-                                                 StarObj
+    GalaxyAgnObj, GalaxyTileCompoundObj, \
+    StarObj
 
 from lsst.sims.catalogs.measures.instance import InstanceCatalog, CompoundInstanceCatalog
+
 
 class BulgeDiskCatalog(InstanceCatalog):
     cannot_be_null = ['sedFilename']
     column_outputs = ['galtileid', 'raJ2000', 'decJ2000',
-                     'componentra', 'componentdec',
-                     'magNorm', 'sedFilename',
-                     'majorAxis', 'minorAxis',
-                     'positionAngle',
-                     'halfLightRadius',
-                     'internalExtinctionModel',
-                     'internalAv', 'internalRv',
-                     ]
+                      'componentra', 'componentdec',
+                      'magNorm', 'sedFilename',
+                      'majorAxis', 'minorAxis',
+                      'positionAngle',
+                      'halfLightRadius',
+                      'internalExtinctionModel',
+                      'internalAv', 'internalRv',
+                      ]
 
 
 class AgnCatalog(InstanceCatalog):
     cannot_be_null = ['sedFilename']
     column_outputs = ['galtileid', 'raJ2000', 'decJ2000',
-                      'componentra','componentdec',
+                      'componentra', 'componentdec',
                       'magNorm', 'sedFilename',
                       'variabilityParameters',
                       ]
@@ -40,10 +41,11 @@ class StarCatalog(InstanceCatalog):
                       'parallax', 'galacticAv', 'radialVelocity',
                       'variabilityParameters', 'sedFilename']
 
+
 class CompoundCatalogTest(unittest.TestCase):
 
     def setUp(self):
-        self.baseDir = os.path.join(getPackageDir('sims_catUtils'), \
+        self.baseDir = os.path.join(getPackageDir('sims_catUtils'),
                                     'tests', 'scratchSpace')
 
     @unittest.expectedFailure
@@ -75,7 +77,6 @@ class CompoundCatalogTest(unittest.TestCase):
         catBulge.write_catalog(controlFileName, write_header=False, chunk_size=10000)
         catDisk.write_catalog(controlFileName, write_mode='a', write_header=False, chunk_size=10000)
         catAgn.write_catalog(controlFileName, write_mode='a', write_header=False, chunk_size=10000)
-
 
         # You need to reinstantiate the catalogs because the process of writing them
         # above stripped galtileid from their _active_columns, which is the only way
@@ -143,7 +144,6 @@ class CompoundCatalogTest(unittest.TestCase):
         catAgn.write_catalog(controlFileName, write_mode='a', write_header=False, chunk_size=10000)
         catStar.write_catalog(controlFileName, write_mode='a', write_header=False, chunk_size=10000)
 
-
         # You need to reinstantiate the catalogs because the process of writing them
         # above stripped galtileid from their _active_columns, which is the only way
         # CompoundInstanceCatalog can know that it needs to worry about galtileid
@@ -185,6 +185,7 @@ def suite():
     suites += unittest.makeSuite(CompoundCatalogTest)
 
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit = False):
     utilsTests.run(suite(), shouldExit)

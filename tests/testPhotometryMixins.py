@@ -6,7 +6,7 @@ import unittest
 import lsst.utils.tests as utilsTests
 from lsst.sims.utils import ObservationMetaData
 from lsst.sims.catalogs.generation.utils import myTestGals, myTestStars, \
-                                                makeStarTestDB, makeGalTestDB, getOneChunk
+    makeStarTestDB, makeGalTestDB, getOneChunk
 
 from lsst.utils import getPackageDir
 from lsst.sims.utils import defaultSpecMap
@@ -17,8 +17,8 @@ from lsst.sims.photUtils import PhotometricParameters, calcSNR_m5, LSSTdefaults
 from lsst.sims.photUtils import calcSNR_sed, magErrorFromSNR
 from lsst.sims.photUtils.utils import setM5
 from lsst.sims.catUtils.utils import cartoonStars, cartoonGalaxies, testStars, testGalaxies, \
-                                     cartoonStarsOnlyI, cartoonStarsIZ, \
-                                     cartoonGalaxiesIG, galaxiesWithHoles
+    cartoonStarsOnlyI, cartoonStarsIZ, \
+    cartoonGalaxiesIG, galaxiesWithHoles
 from lsst.sims.catUtils.mixins import PhotometryBase, PhotometryStars, PhotometryGalaxies
 
 
@@ -41,10 +41,10 @@ class variabilityUnitTest(unittest.TestCase):
 
     def setUp(self):
         self.obs_metadata = ObservationMetaData(mjd=52000.7,
-                            boundType = 'circle',pointingRA=200.0,pointingDec=-30.0,
-                            boundLength=1.0,
-                            m5=[23.9, 25.0, 24.7, 24.0, 23.3, 22.1],
-                            bandpassName=['u', 'g', 'r', 'i', 'z', 'y'])
+                                                boundType = 'circle', pointingRA=200.0, pointingDec=-30.0,
+                                                boundLength=1.0,
+                                                m5=[23.9, 25.0, 24.7, 24.0, 23.3, 22.1],
+                                                bandpassName=['u', 'g', 'r', 'i', 'z', 'y'])
 
         self.galaxy = myTestGals(database='PhotometryTestDatabase.db')
         self.star = myTestStars(database='PhotometryTestDatabase.db')
@@ -58,24 +58,25 @@ class variabilityUnitTest(unittest.TestCase):
 
         galcat = testGalaxies(self.galaxy, obs_metadata=self.obs_metadata)
         results = self.galaxy.query_columns(['varParamStr'], obs_metadata=self.obs_metadata,
-                                             constraint='VarParamStr is not NULL')
+                                            constraint='VarParamStr is not NULL')
         result = getOneChunk(results)
         ct = 0
         for row in result:
-            mags=galcat.applyVariability(row['varParamStr'])
+            mags = galcat.applyVariability(row['varParamStr'])
             ct += 1
-        self.assertGreater(ct, 0) #to make sure that the test was actually performed
+        self.assertGreater(ct, 0)  # to make sure that the test was actually performed
 
     def testStarVariability(self):
         starcat = testStars(self.star, obs_metadata=self.obs_metadata)
         results = self.star.query_columns(['varParamStr'], obs_metadata=self.obs_metadata,
-                                         constraint='VarParamStr is not NULL')
+                                          constraint='VarParamStr is not NULL')
         result = getOneChunk(results)
         ct = 0
         for row in result:
             ct += 1
-            mags=starcat.applyVariability(row['varParamStr'])
-        self.assertGreater(ct, 0) #to make sure that the test was actually performed
+            mags = starcat.applyVariability(row['varParamStr'])
+        self.assertGreater(ct, 0)  # to make sure that the test was actually performed
+
 
 class photometryUnitTest(unittest.TestCase):
 
@@ -96,12 +97,12 @@ class photometryUnitTest(unittest.TestCase):
 
     def setUp(self):
         defaults = LSSTdefaults()
-        bandpassName=['u', 'g', 'r', 'i', 'z', 'y']
+        bandpassName = ['u', 'g', 'r', 'i', 'z', 'y']
         self.obs_metadata = ObservationMetaData(mjd=52000.7,
-                            bandpassName=bandpassName,
-                            m5=[defaults.m5(mm) for mm in bandpassName],
-                            boundType='circle',pointingRA=200.0,pointingDec=-30.0,
-                            boundLength=1.0)
+                                                bandpassName=bandpassName,
+                                                m5=[defaults.m5(mm) for mm in bandpassName],
+                                                boundType='circle', pointingRA=200.0, pointingDec=-30.0,
+                                                boundLength=1.0)
 
         self.galaxy = myTestGals(database='PhotometryTestDatabase.db')
         self.star = myTestStars(database='PhotometryTestDatabase.db')
@@ -118,18 +119,17 @@ class photometryUnitTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-        test_cat=testStars(self.star, obs_metadata=self.obs_metadata)
+        test_cat = testStars(self.star, obs_metadata=self.obs_metadata)
         test_cat.write_catalog(catName)
         cat = open(catName)
         lines = cat.readlines()
-        self.assertGreater(len(lines), 1) #to make sure we did not write an empty catalog
+        self.assertGreater(len(lines), 1)  # to make sure we did not write an empty catalog
         cat.close()
         results = self.star.query_columns(obs_metadata=self.obs_metadata)
         result = getOneChunk(results)
-        self.assertGreater(len(result), 0) #to make sure some results are returned
+        self.assertGreater(len(result), 0)  # to make sure some results are returned
         if os.path.exists(catName):
             os.unlink(catName)
-
 
     def testGalaxyCatalog(self):
         catName = os.path.join(getPackageDir('sims_catUtils'), 'tests',
@@ -137,19 +137,18 @@ class photometryUnitTest(unittest.TestCase):
 
         if os.path.exists(catName):
             os.unlink(catName)
-        test_cat=testGalaxies(self.galaxy, obs_metadata=self.obs_metadata)
+        test_cat = testGalaxies(self.galaxy, obs_metadata=self.obs_metadata)
         test_cat.write_catalog(catName)
         cat = open(catName)
         lines = cat.readlines()
-        self.assertGreater(len(lines), 1) #to make sure we did not write an empty catalog
+        self.assertGreater(len(lines), 1)  # to make sure we did not write an empty catalog
         cat.close()
         results = self.galaxy.query_columns(obs_metadata=self.obs_metadata)
         result = getOneChunk(results)
-        self.assertGreater(len(result), 0) #to make sure some results are returned
+        self.assertGreater(len(result), 0)  # to make sure some results are returned
 
         if os.path.exists(catName):
             os.unlink(catName)
-
 
     def test_m5_exceptions(self):
         """
@@ -173,7 +172,6 @@ class photometryUnitTest(unittest.TestCase):
         self.assertIn('Is it possible your ObservationMetaData does not have the proper\nm5 values defined?',
                       context.exception.args[0])
 
-
         with self.assertRaises(KeyError) as context:
             cat = testGalaxies(self.galaxy, obs_metadata=obs)
             cat.write_catalog(catName)
@@ -183,7 +181,6 @@ class photometryUnitTest(unittest.TestCase):
 
         if os.path.exists(catName):
             os.unlink(catName)
-
 
     def testSumMagnitudes(self):
         """
@@ -236,7 +233,7 @@ class photometryUnitTest(unittest.TestCase):
 
         for ix, (bb, dd, aa, truth) in enumerate(zip(bulge, disk, agn, answer)):
             test = phot.sum_magnitudes(bulge=bb, disk=dd, agn=aa)
-            if ix<7:
+            if ix < 7:
                 self.assertAlmostEqual(test, truth, 10)
                 self.assertFalse(numpy.isnan(test))
             else:
@@ -257,10 +254,10 @@ class photometryUnitTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-        obs_metadata=ObservationMetaData(mjd=50000.0,
-                               boundType='circle',pointingRA=0.0,pointingDec=0.0,
-                               boundLength=10.0)
-        test_cat=galaxiesWithHoles(self.galaxy,obs_metadata=obs_metadata)
+        obs_metadata = ObservationMetaData(mjd=50000.0,
+                                           boundType='circle', pointingRA=0.0, pointingDec=0.0,
+                                           boundLength=10.0)
+        test_cat = galaxiesWithHoles(self.galaxy, obs_metadata=obs_metadata)
         test_cat.write_catalog(catName)
 
         dtype = numpy.dtype([
@@ -275,8 +272,6 @@ class photometryUnitTest(unittest.TestCase):
                             ('ua', numpy.float), ('ga', numpy.float), ('ra', numpy.float),
                             ('ia', numpy.float), ('za', numpy.float), ('ya', numpy.float)
                             ])
-
-
 
         data = numpy.genfromtxt(catName, dtype=dtype, delimiter=', ')
         self.assertGreater(len(data), 16)
@@ -314,7 +309,6 @@ class photometryUnitTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-
     def testAlternateBandpassesStars(self):
         """
         This will test our ability to do photometry using non-LSST bandpasses.
@@ -333,23 +327,23 @@ class photometryUnitTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-        obs_metadata_pointed=ObservationMetaData(mjd=2013.23,
-                                                 boundType='circle',pointingRA=200.0,pointingDec=-30.0,
-                                                 boundLength=1.0)
+        obs_metadata_pointed = ObservationMetaData(mjd=2013.23,
+                                                   boundType='circle', pointingRA=200.0, pointingDec=-30.0,
+                                                   boundLength=1.0)
 
-        test_cat=cartoonStars(self.star,obs_metadata=obs_metadata_pointed)
+        test_cat = cartoonStars(self.star, obs_metadata=obs_metadata_pointed)
 
         test_cat.write_catalog(catName)
 
         cartoonDir = os.path.join(getPackageDir('sims_photUtils'), 'tests', 'cartoonSedTestData')
         testBandPasses = {}
-        keys = ['u','g','r','i','z']
+        keys = ['u', 'g', 'r', 'i', 'z']
 
         bplist = []
 
         for kk in keys:
             testBandPasses[kk] = Bandpass()
-            testBandPasses[kk].readThroughput(os.path.join(cartoonDir,"test_bandpass_%s.dat" % kk))
+            testBandPasses[kk].readThroughput(os.path.join(cartoonDir, "test_bandpass_%s.dat" % kk))
             bplist.append(testBandPasses[kk])
 
         sedObj = Sed()
@@ -357,18 +351,18 @@ class photometryUnitTest(unittest.TestCase):
 
         i = 0
 
-        #since all of the SEDs in the cartoon database are the same, just test on the first
-        #if we ever include more SEDs, this can be something like
-        #for ss in test_cata.sedMasterList:
+        # since all of the SEDs in the cartoon database are the same, just test on the first
+        # if we ever include more SEDs, this can be something like
+        # for ss in test_cata.sedMasterList:
         #
-        ss=test_cat.sedMasterList[0]
+        ss = test_cat.sedMasterList[0]
         ss.resampleSED(wavelen_match = bplist[0].wavelen)
         ss.flambdaTofnu()
         mags = -2.5*numpy.log10(numpy.sum(phiArray*ss.fnu, axis=1)*waveLenStep) - ss.zp
         self.assertEqual(len(mags), len(test_cat.cartoonBandpassDict))
         self.assertGreater(len(mags), 0)
         for j in range(len(mags)):
-            self.assertAlmostEqual(mags[j],test_cat.magnitudeMasterList[i][j],4)
+            self.assertAlmostEqual(mags[j], test_cat.magnitudeMasterList[i][j], 4)
 
         with open(catName, 'r') as input_file:
             lines = input_file.readlines()
@@ -388,47 +382,47 @@ class photometryUnitTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-        obs_metadata_pointed=ObservationMetaData(mjd=50000.0,
-                               boundType='circle',pointingRA=0.0,pointingDec=0.0,
-                               boundLength=10.0)
+        obs_metadata_pointed = ObservationMetaData(mjd=50000.0,
+                                                   boundType='circle', pointingRA=0.0, pointingDec=0.0,
+                                                   boundLength=10.0)
 
-        test_cat=cartoonGalaxies(self.galaxy,obs_metadata=obs_metadata_pointed)
+        test_cat = cartoonGalaxies(self.galaxy, obs_metadata=obs_metadata_pointed)
         test_cat.write_catalog(catName)
 
         dtype = numpy.dtype([
-                             ('galid', numpy.int),
-                             ('ra', numpy.float),
-                             ('dec', numpy.float),
-                             ('uTotal', numpy.float),
-                             ('gTotal', numpy.float),
-                             ('rTotal', numpy.float),
-                             ('iTotal', numpy.float),
-                             ('zTotal', numpy.float),
-                             ('uBulge', numpy.float),
-                             ('gBulge', numpy.float),
-                             ('rBulge', numpy.float),
-                             ('iBulge', numpy.float),
-                             ('zBulge', numpy.float),
-                             ('uDisk', numpy.float),
-                             ('gDisk', numpy.float),
-                             ('rDisk', numpy.float),
-                             ('iDisk', numpy.float),
-                             ('zDisk', numpy.float),
-                             ('uAgn', numpy.float),
-                             ('gAgn', numpy.float),
-                             ('rAgn', numpy.float),
-                             ('iAgn', numpy.float),
-                             ('zAgn', numpy.float),
-                             ('bulgeName', str, 200),
-                             ('bulgeNorm', numpy.float),
-                             ('bulgeAv', numpy.float),
-                             ('diskName', str, 200),
-                             ('diskNorm', numpy.float),
-                             ('diskAv', numpy.float),
-                             ('agnName', str, 200),
-                             ('agnNorm', numpy.float),
-                             ('redshift', numpy.float)
-                            ])
+            ('galid', numpy.int),
+            ('ra', numpy.float),
+            ('dec', numpy.float),
+            ('uTotal', numpy.float),
+            ('gTotal', numpy.float),
+            ('rTotal', numpy.float),
+            ('iTotal', numpy.float),
+            ('zTotal', numpy.float),
+            ('uBulge', numpy.float),
+            ('gBulge', numpy.float),
+            ('rBulge', numpy.float),
+            ('iBulge', numpy.float),
+            ('zBulge', numpy.float),
+            ('uDisk', numpy.float),
+            ('gDisk', numpy.float),
+            ('rDisk', numpy.float),
+            ('iDisk', numpy.float),
+            ('zDisk', numpy.float),
+            ('uAgn', numpy.float),
+            ('gAgn', numpy.float),
+            ('rAgn', numpy.float),
+            ('iAgn', numpy.float),
+            ('zAgn', numpy.float),
+            ('bulgeName', str, 200),
+            ('bulgeNorm', numpy.float),
+            ('bulgeAv', numpy.float),
+            ('diskName', str, 200),
+            ('diskNorm', numpy.float),
+            ('diskAv', numpy.float),
+            ('agnName', str, 200),
+            ('agnNorm', numpy.float),
+            ('redshift', numpy.float)
+        ])
 
         catData = numpy.genfromtxt(catName, dtype=dtype, delimiter=', ')
 
@@ -439,11 +433,11 @@ class photometryUnitTest(unittest.TestCase):
         sedDir = getPackageDir('sims_sed_library')
 
         testBandpasses = {}
-        keys = ['u','g','r','i','z']
+        keys = ['u', 'g', 'r', 'i', 'z']
 
         for kk in keys:
             testBandpasses[kk] = Bandpass()
-            testBandpasses[kk].readThroughput(os.path.join(cartoonDir,"test_bandpass_%s.dat" % kk))
+            testBandpasses[kk].readThroughput(os.path.join(cartoonDir, "test_bandpass_%s.dat" % kk))
 
         imsimBand = Bandpass()
         imsimBand.imsimBandpass()
@@ -518,8 +512,7 @@ class photometryUnitTest(unittest.TestCase):
                 if numpy.isnan(line['%sTotal' % bpName]):
                     self.assertTrue(numpy.isnan(testMag))
                 else:
-                    self.assertAlmostEqual(testMag, line['%sTotal' % bpName],10)
-
+                    self.assertAlmostEqual(testMag, line['%sTotal' % bpName], 10)
 
         self.assertGreater(ct, 0)
         if os.path.exists(catName):
@@ -531,39 +524,39 @@ class photometryUnitTest(unittest.TestCase):
         even when it is not calculating all of the magnitudes in the getter
         """
 
-        baselineDtype = numpy.dtype([('id',int),
+        baselineDtype = numpy.dtype([('id', int),
                                      ('raObserved', float), ('decObserved', float),
                                      ('magNorm', float),
-                                     ('cartoon_u', float), ('cartoon_g',float),
+                                     ('cartoon_u', float), ('cartoon_g', float),
                                      ('cartoon_r', float), ('cartoon_i', float),
                                      ('cartoon_z', float)])
 
         baselineCatName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
-                                      'testPhotMix_testStellarIndices_stellarBaselineCatalog.txt')
+                                       'testPhotMix_testStellarIndices_stellarBaselineCatalog.txt')
 
         if os.path.exists(baselineCatName):
             os.unlink(baselineCatName)
 
-        testDtype = numpy.dtype([('id',int),
-                                 ('raObserved',float), ('decObserved',float),
-                                 ('cartoon_i',float)])
+        testDtype = numpy.dtype([('id', int),
+                                 ('raObserved', float), ('decObserved', float),
+                                 ('cartoon_i', float)])
 
         testCatName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace',
-                                  'testPhotMix_testStellarIndices_stellarTestCatalog.txt')
+                                   'testPhotMix_testStellarIndices_stellarTestCatalog.txt')
 
         if os.path.exists(testCatName):
             os.unlink(testCatName)
 
-        obs_metadata_pointed=ObservationMetaData(mjd=2013.23,
-                                                 boundType='circle',pointingRA=200.0,pointingDec=-30.0,
-                                                 boundLength=1.0)
+        obs_metadata_pointed = ObservationMetaData(mjd=2013.23,
+                                                   boundType='circle', pointingRA=200.0, pointingDec=-30.0,
+                                                   boundLength=1.0)
 
-        baseline_cat=cartoonStars(self.star,obs_metadata=obs_metadata_pointed)
+        baseline_cat = cartoonStars(self.star, obs_metadata=obs_metadata_pointed)
         baseline_cat.write_catalog(baselineCatName)
         baselineData = numpy.genfromtxt(baselineCatName, dtype=baselineDtype, delimiter=',')
         self.assertGreater(len(baselineData), 0)
 
-        test_cat=cartoonStarsOnlyI(self.star, obs_metadata=obs_metadata_pointed)
+        test_cat = cartoonStarsOnlyI(self.star, obs_metadata=obs_metadata_pointed)
         test_cat.write_catalog(testCatName)
         testData = numpy.genfromtxt(testCatName, dtype=testDtype, delimiter=',')
         self.assertGreater(len(testData), 0)
@@ -571,12 +564,11 @@ class photometryUnitTest(unittest.TestCase):
         for b, t in zip(baselineData, testData):
             self.assertAlmostEqual(b['cartoon_i'], t['cartoon_i'], 10)
 
-        testDtype = numpy.dtype([('id',int),
-                                 ('raObserved',float), ('decObserved',float),
-                                 ('cartoon_i',float), ('cartoon_z',float)])
+        testDtype = numpy.dtype([('id', int),
+                                 ('raObserved', float), ('decObserved', float),
+                                 ('cartoon_i', float), ('cartoon_z', float)])
 
-
-        test_cat=cartoonStarsIZ(self.star, obs_metadata=obs_metadata_pointed)
+        test_cat = cartoonStarsIZ(self.star, obs_metadata=obs_metadata_pointed)
         test_cat.write_catalog(testCatName)
         testData = numpy.genfromtxt(testCatName, dtype=testDtype, delimiter=',')
         self.assertGreater(len(testData), 0)
@@ -606,11 +598,11 @@ class photometryUnitTest(unittest.TestCase):
                                      ('ctotal_i', float),
                                      ('ctotal_z', float)])
 
-        obs_metadata_pointed=ObservationMetaData(mjd=50000.0,
-                               boundType='circle',pointingRA=0.0,pointingDec=0.0,
-                               boundLength=10.0)
+        obs_metadata_pointed = ObservationMetaData(mjd=50000.0,
+                                                   boundType='circle', pointingRA=0.0, pointingDec=0.0,
+                                                   boundLength=10.0)
 
-        baseline_cat=cartoonGalaxies(self.galaxy,obs_metadata=obs_metadata_pointed)
+        baseline_cat = cartoonGalaxies(self.galaxy, obs_metadata=obs_metadata_pointed)
         baseline_cat.write_catalog(baselineCatName)
         baselineData = numpy.genfromtxt(baselineCatName, dtype=baselineDtype, delimiter=',')
         self.assertGreater(len(baselineData), 0)
@@ -632,7 +624,7 @@ class photometryUnitTest(unittest.TestCase):
         testData = numpy.genfromtxt(testCatName, dtype=testDtype, delimiter=',')
         self.assertGreater(len(testData), 0)
 
-        for b,t in zip(baselineData, testData):
+        for b, t in zip(baselineData, testData):
             self.assertAlmostEqual(b['ctotal_i'], t['ctotal_i'], 10)
             self.assertAlmostEqual(b['ctotal_g'], t['ctotal_g'], 10)
 
@@ -647,11 +639,11 @@ class photometryUnitTest(unittest.TestCase):
         Use manMagCalc_list with specified indices on an Sed.  Make sure
         that the appropriate magnitudes are or are not Nan
         """
-        starName = os.path.join(getPackageDir('sims_sed_library'),defaultSpecMap['km20_5750.fits_g40_5790'])
+        starName = os.path.join(getPackageDir('sims_sed_library'), defaultSpecMap['km20_5750.fits_g40_5790'])
         starPhot = BandpassDict.loadTotalBandpassesFromFiles()
         testSed = Sed()
         testSed.readSED_flambda(starName)
-        indices = [1,3]
+        indices = [1, 3]
         mags = starPhot.magListForSed(testSed, indices=indices)
         self.assertTrue(numpy.isnan(mags[0]))
         self.assertFalse(numpy.isnan(mags[1]))
@@ -663,8 +655,9 @@ class photometryUnitTest(unittest.TestCase):
 
 
 class UncertaintyMixinTest(unittest.TestCase):
+
     def setUp(self):
-        starName = os.path.join(getPackageDir('sims_sed_library'),defaultSpecMap['km20_5750.fits_g40_5790'])
+        starName = os.path.join(getPackageDir('sims_sed_library'), defaultSpecMap['km20_5750.fits_g40_5790'])
         self.starSED = Sed()
         self.starSED.readSED_flambda(starName)
         imsimband = Bandpass()
@@ -679,20 +672,19 @@ class UncertaintyMixinTest(unittest.TestCase):
                          'lens1.dat', 'lens2.dat', 'lens3.dat']
         hardwareComponents = []
         for c in componentList:
-            hardwareComponents.append(os.path.join(getPackageDir('throughputs'),'baseline',c))
+            hardwareComponents.append(os.path.join(getPackageDir('throughputs'), 'baseline', c))
 
         self.bandpasses = ['u', 'g', 'r', 'i', 'z', 'y']
         for b in self.bandpasses:
-            filterName = os.path.join(getPackageDir('throughputs'),'baseline','filter_%s.dat' % b)
+            filterName = os.path.join(getPackageDir('throughputs'), 'baseline', 'filter_%s.dat' % b)
             components = hardwareComponents + [filterName]
             bandpassDummy = Bandpass()
             bandpassDummy.readThroughputList(components)
             self.hardwareBandpasses.append(bandpassDummy)
-            components = components + [os.path.join(getPackageDir('throughputs'),'baseline','atmos.dat')]
+            components = components + [os.path.join(getPackageDir('throughputs'), 'baseline', 'atmos.dat')]
             bandpassDummy = Bandpass()
             bandpassDummy.readThroughputList(components)
             self.totalBandpasses.append(bandpassDummy)
-
 
 
 def suite():
@@ -704,8 +696,9 @@ def suite():
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
     return unittest.TestSuite(suites)
 
+
 def run(shouldExit = False):
-    utilsTests.run(suite(),shouldExit)
+    utilsTests.run(suite(), shouldExit)
 
 if __name__ == "__main__":
     run(True)

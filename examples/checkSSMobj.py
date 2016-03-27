@@ -18,8 +18,9 @@ from lsst.utils import getPackageDir
 from lsst.sims.utils import ObservationMetaData
 from lsst.sims.catalogs.measures.instance import InstanceCatalog
 from lsst.sims.catUtils.baseCatalogModels import SolarSystemObj, CometObj, \
-                                                 MBAObj, NEOObj, \
-                                                 MiscSolarSystemObj
+    MBAObj, NEOObj, \
+    MiscSolarSystemObj
+
 
 class ssmBaseCatalog(InstanceCatalog):
     column_outputs = ['objid', 'raJ2000', 'decJ2000', 'sedFilename',
@@ -49,7 +50,6 @@ if __name__ == "__main__":
         if os.path.exists(catName):
             os.unlink(catName)
 
-
         obs = ObservationMetaData(pointingRA=25.0, pointingDec=-5.0,
                                   mjd=mjd, boundType='circle',
                                   boundLength=0.5)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
         cat.write_catalog(catName)
 
-        with open(catName,'r') as readFile:
+        with open(catName, 'r') as readFile:
             lines = readFile.readlines()
             if len(lines) <= 1:
                 raise RuntimeError('%s is empty' % catName)

@@ -15,16 +15,16 @@ class EBVmixin(EBVbase):
     calculateEbv in the EBVbase class
     """
 
-    #and finally, here is the getter
+    # and finally, here is the getter
     @cached
     def get_EBV(self):
         """
         Getter for the InstanceCatalog framework
         """
 
-        galacticCoordinates=numpy.array([self.column_by_name('glon'),self.column_by_name('glat')])
+        galacticCoordinates = numpy.array([self.column_by_name('glon'), self.column_by_name('glat')])
 
-        EBV_out=numpy.array(self.calculateEbv(galacticCoordinates=galacticCoordinates,interp=True))
+        EBV_out = numpy.array(self.calculateEbv(galacticCoordinates=galacticCoordinates, interp=True))
         return EBV_out
 
     @cached

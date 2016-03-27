@@ -19,7 +19,7 @@ obs_metadata = ObservationMetaData(pointingRA = 220.0,
 
 
 from lsst.sims.catUtils.exampleCatalogDefinitions import RefCatalogGalaxyBase, \
-                                                  RefCatalogStarBase
+    RefCatalogStarBase
 
 myStarCat = RefCatalogStarBase(myStarDB, obs_metadata=obs_metadata)
 myStarCat.write_catalog('star_example.txt')
@@ -29,10 +29,10 @@ myGalaxyCat.write_catalog('galaxy_example.txt')
 
 
 squareObsMetadata = ObservationMetaData(pointingRA = 220.0,
-                                       pointingDec = 19.0,
-                                       boundType = 'box',
-                                       boundLength = 0.3,
-                                       mjd = 52000.0)
+                                        pointingDec = 19.0,
+                                        boundType = 'box',
+                                        boundLength = 0.3,
+                                        mjd = 52000.0)
 
 myStarCat = RefCatalogStarBase(myStarDB, obs_metadata=squareObsMetadata)
 myStarCat.write_catalog('star_example_square.txt')

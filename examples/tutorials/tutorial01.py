@@ -9,16 +9,17 @@ from lsst.sims.utils import ObservationMetaData
 from lsst.sims.catUtils.baseCatalogModels import *
 from lsst.sims.catalogs.measures.instance import InstanceCatalog, cached, compound
 
+
 class TutorialCatalog(InstanceCatalog):
 
-    #this the member variable that defines what columns should be output
-    #when we call write_catalog
+    # this the member variable that defines what columns should be output
+    # when we call write_catalog
     column_outputs = ['raJ2000', 'decJ2000', 'sum', 'difference', 'quotient',
                       'df1', 'df2']
 
-    #this is the member variable that contains default values for columns
-    #that are neither defined in the database nor set by a getter
-    default_columns = [('df1', 3.5, float), ('df2', 'default', (str,7))]
+    # this is the member variable that contains default values for columns
+    # that are neither defined in the database nor set by a getter
+    default_columns = [('df1', 3.5, float), ('df2', 'default', (str, 7))]
 
     @cached
     def get_quotient(self):
@@ -33,8 +34,8 @@ class TutorialCatalog(InstanceCatalog):
         ra = self.column_by_name('raJ2000')
         dec = self.column_by_name('decJ2000')
 
-        #because self.column_by_name() returns a numpy array, we can use
-        #numpy array's matrix formalism to calculate the result
+        # because self.column_by_name() returns a numpy array, we can use
+        # numpy array's matrix formalism to calculate the result
         return ra/dec
 
     @compound('sum', 'difference')
@@ -47,8 +48,8 @@ class TutorialCatalog(InstanceCatalog):
         ra = self.column_by_name('raJ2000')
         dec = self.column_by_name('decJ2000')
 
-        #note that the columns must be returned in the order in which
-        #they are declared to @compound()
+        # note that the columns must be returned in the order in which
+        # they are declared to @compound()
         return numpy.array([ra+dec, ra-dec])
 
 myDB = CatalogDBObject.from_objid('allstars')

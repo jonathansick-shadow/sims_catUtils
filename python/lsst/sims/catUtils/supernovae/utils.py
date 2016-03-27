@@ -2,6 +2,8 @@ import matplotlib.gridspec as gridspec
 import matplotlib.ticker as ticker
 import matplotlib.pyplot as plt
 __all__ = ['settwopanel']
+
+
 def settwopanel(height_ratios=[1.0, 0.3],
                 width_ratios=[1., 0.],
                 padding=None,

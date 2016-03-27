@@ -5,10 +5,12 @@ from lsst.sims.catalogs.generation.db import CatalogDBObject
 from lsst.sims.utils import ObservationMetaData
 from lsst.sims.utils import haversine
 
-#The following is to get the object ids in the registry
+# The following is to get the object ids in the registry
 import lsst.sims.catUtils.baseCatalogModels as bcm
 
+
 class testCatalogBounds(unittest.TestCase):
+
     @unittest.expectedFailure
     def testCircleBounds(self):
         """Test Sql Server circular search region.
@@ -18,26 +20,26 @@ class testCatalogBounds(unittest.TestCase):
         column_outputs = ['raJ2000', 'decJ2000']
         for objname, objcls in CatalogDBObject.registry.iteritems():
             if not objcls.doRunTest \
-            or (objcls.testObservationMetaData is None) \
-            or (objcls.testObservationMetaData.bounds is None) \
-            or (objcls.testObservationMetaData.bounds.boundType != 'circle'):
+                    or (objcls.testObservationMetaData is None) \
+                    or (objcls.testObservationMetaData.bounds is None) \
+                    or (objcls.testObservationMetaData.bounds.boundType != 'circle'):
                 continue
             print "Running tests for", objname
             obs_metadata = objcls.testObservationMetaData
             dbobj = objcls(verbose=False)
             result = dbobj.query_columns(column_outputs, obs_metadata=obs_metadata)
 
-            #testObservationMetadata gives few enough results for one chunk
+            # testObservationMetadata gives few enough results for one chunk
             try:
                 result = result.next()
             except StopIteration:
                 raise RuntimeError("No results for %s."%(objname))
 
-            #confirm radius > distance from all points to center
+            # confirm radius > distance from all points to center
             self.assertGreater(obs_metadata.bounds.radius + 1.e-4,
-                           max(haversine(numpy.radians(obs_metadata.unrefractedRA),
-                                                      numpy.radians(obs_metadata.unrefractedDec),
-                                                      result['raJ2000'], result['decJ2000'])))
+                               max(haversine(numpy.radians(obs_metadata.unrefractedRA),
+                                             numpy.radians(obs_metadata.unrefractedDec),
+                                             result['raJ2000'], result['decJ2000'])))
 
     @unittest.expectedFailure
     def testBoxBounds(self):
@@ -48,21 +50,21 @@ class testCatalogBounds(unittest.TestCase):
         column_outputs = ['raJ2000', 'decJ2000']
         for objname, objcls in CatalogDBObject.registry.iteritems():
             if not objcls.doRunTest \
-            or (objcls.testObservationMetaData is None) \
-            or (objcls.testObservationMetaData.bounds is None) \
-            or (objcls.testObservationMetaData.bounds.boundType != 'circle'):
+                    or (objcls.testObservationMetaData is None) \
+                    or (objcls.testObservationMetaData.bounds is None) \
+                    or (objcls.testObservationMetaData.bounds.boundType != 'circle'):
                 continue
             print "Running tests for", objname
             circ_bounds = objcls.testObservationMetaData.bounds
             length = numpy.degrees(circ_bounds.radius)
             raCenter = numpy.degrees(circ_bounds.RA)+length
             decCenter = numpy.degrees(circ_bounds.DEC)+length
-            obs_metadata = ObservationMetaData(boundType='box',unrefractedRA=raCenter,unrefractedDec=decCenter,
+            obs_metadata = ObservationMetaData(boundType='box', unrefractedRA=raCenter, unrefractedDec=decCenter,
                                                boundLength=length,
                                                mjd=51000., bandpassName='i')
             dbobj = objcls(verbose=False)
             result = dbobj.query_columns(column_outputs, obs_metadata=obs_metadata)
-            #testObservationMetadata gives few enough results for one chunk
+            # testObservationMetadata gives few enough results for one chunk
             try:
                 result = result.next()
             except StopIteration:
@@ -81,6 +83,7 @@ def suite():
     suites += unittest.makeSuite(testCatalogBounds)
     suites += unittest.makeSuite(utilsTests.MemoryTestCase)
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     utilsTests.run(suite(), shouldExit)

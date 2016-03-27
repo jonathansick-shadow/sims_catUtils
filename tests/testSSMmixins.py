@@ -12,17 +12,18 @@ from lsst.sims.catUtils.mixins import PhotometrySSM, AstrometrySSM
 from lsst.sims.photUtils import BandpassDict, SedList, PhotometricParameters
 from lsst.sims.utils import _observedFromICRS
 
-class LSST_SSM_photCat(InstanceCatalog, PhotometrySSM):
-    column_outputs = ['id', 'lsst_u' ,'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y']
 
-    default_formats = {'f':'%.13f'}
+class LSST_SSM_photCat(InstanceCatalog, PhotometrySSM):
+    column_outputs = ['id', 'lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y']
+
+    default_formats = {'f': '%.13f'}
 
 
 class Compound_SSM_photCat(InstanceCatalog, PhotometrySSM):
-    column_outputs = ['id', 'lsst_u' ,'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y',
+    column_outputs = ['id', 'lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y',
                       'cartoon_u', 'cartoon_g', 'cartoon_r', 'cartoon_i', 'cartoon_z']
 
-    default_formats = {'f':'%.13f'}
+    default_formats = {'f': '%.13f'}
 
     @compound('cartoon_u', 'cartoon_g', 'cartoon_r', 'cartoon_i', 'cartoon_z')
     def get_cartoon_mags(self):
@@ -31,11 +32,10 @@ class Compound_SSM_photCat(InstanceCatalog, PhotometrySSM):
             bandpassDir = os.path.join(getPackageDir('sims_photUtils'), 'tests', 'cartoonSedTestData')
 
             self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(
-                                                      ['u', 'g', 'r', 'i', 'z'],
-                                                      bandpassDir = bandpassDir,
-                                                      bandpassRoot = 'test_bandpass_'
-                                                      )
-
+                ['u', 'g', 'r', 'i', 'z'],
+                bandpassDir = bandpassDir,
+                bandpassRoot = 'test_bandpass_'
+            )
 
         return self._magnitudeGetter(self.cartoonBandpassDict, self.get_cartoon_mags._colnames,
                                      bandpassTag='cartoon')
@@ -52,13 +52,12 @@ class SSMphotometryTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.dbFile = os.path.join(getPackageDir('sims_catUtils'),
-                        'tests', 'testData', 'SSMphotometryCatalog.txt')
+                                  'tests', 'testData', 'SSMphotometryCatalog.txt')
 
         cls.dtype = np.dtype([('id', np.int), ('sedFilename', str, 100), ('magNorm', np.float),
                               ('velRa', np.float), ('velDec', np.float)])
 
         cls.photDB = fileDBObject(cls.dbFile, runtable='test', dtype=cls.dtype, idColKey='id')
-
 
     def testLSSTmags(self):
         """
@@ -66,7 +65,7 @@ class SSMphotometryTest(unittest.TestCase):
         """
         catName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace', 'lsstSsmPhotCat.txt')
 
-        cat=LSST_SSM_photCat(self.photDB)
+        cat = LSST_SSM_photCat(self.photDB)
         cat.write_catalog(catName)
 
         dtype = np.dtype([('id', np.int), ('u', np.float), ('g', np.float),
@@ -92,15 +91,15 @@ class SSMphotometryTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-
     def testManyMagSystems(self):
         """
         Test that the SSM photometry mixin can simultaneously calculate magnitudes
         in multiple bandpass systems
         """
-        catName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace', 'compoundSsmPhotCat.txt')
+        catName = os.path.join(getPackageDir('sims_catUtils'), 'tests',
+                               'scratchSpace', 'compoundSsmPhotCat.txt')
 
-        cat=Compound_SSM_photCat(self.photDB)
+        cat = Compound_SSM_photCat(self.photDB)
         cat.write_catalog(catName)
 
         dtype = np.dtype([('id', np.int), ('lsst_u', np.float), ('lsst_g', np.float),
@@ -118,10 +117,10 @@ class SSMphotometryTest(unittest.TestCase):
 
         LSSTbandpasses = BandpassDict.loadTotalBandpassesFromFiles()
         cartoonBandpasses = BandpassDict.loadTotalBandpassesFromFiles(
-                                  ['u', 'g', 'r', 'i', 'z'],
-                                  bandpassDir = os.path.join(getPackageDir('sims_photUtils'), 'tests', 'cartoonSedTestData'),
-                                  bandpassRoot = 'test_bandpass_'
-                                  )
+            ['u', 'g', 'r', 'i', 'z'],
+            bandpassDir = os.path.join(getPackageDir('sims_photUtils'), 'tests', 'cartoonSedTestData'),
+            bandpassRoot = 'test_bandpass_'
+        )
 
         controlSedList = SedList(controlData['sedFilename'], controlData['magNorm'],
                                  wavelenMatch=LSSTbandpasses.wavelenMatch)
@@ -138,14 +137,13 @@ class SSMphotometryTest(unittest.TestCase):
         if os.path.exists(catName):
             os.unlink(catName)
 
-
     def testDmagExceptions(self):
         """
         Test that the dmagTrailing and dmagDetection getters raise expected
         exceptions
         """
-        catName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace', 'ssmDmagCatExceptions.txt')
-
+        catName = os.path.join(getPackageDir('sims_catUtils'), 'tests',
+                               'scratchSpace', 'ssmDmagCatExceptions.txt')
 
         obs = ObservationMetaData()
         with self.assertRaises(RuntimeError) as context:
@@ -164,11 +162,10 @@ class SSMphotometryTest(unittest.TestCase):
             cat.photParams = None
             cat.write_catalog(catName)
         self.assertIn("does not have an associated PhotometricParameters",
-                       context.exception.args[0])
+                      context.exception.args[0])
 
         if os.path.exists(catName):
             os.unlink(catName)
-
 
     def testDmag(self):
         """
@@ -193,8 +190,9 @@ class SSMphotometryTest(unittest.TestCase):
         a_det = 0.42
         b_det = 0.00
 
-        velocity = np.sqrt(np.power(np.degrees(controlData['velRa']), 2) + np.power(np.degrees(controlData['velDec']), 2))
-        x = velocity * photParams.nexp * photParams.exptime /(obs.seeing[obs.bandpass] * 24.0)
+        velocity = np.sqrt(
+            np.power(np.degrees(controlData['velRa']), 2) + np.power(np.degrees(controlData['velDec']), 2))
+        x = velocity * photParams.nexp * photParams.exptime / (obs.seeing[obs.bandpass] * 24.0)
         xsq = np.power(x, 2)
 
         dmagTrailControl = 1.25*np.log10(1.0 + a_trail*xsq/(1.0+b_trail*x))
@@ -220,7 +218,7 @@ class SSM_astrometryCat(InstanceCatalog, AstrometrySSM):
 class SSM_velocityCat(InstanceCatalog, AstrometrySSM):
     column_outputs = ['id', 'skyVelocity']
 
-    default_formats= {'f': '%.13f'}
+    default_formats = {'f': '%.13f'}
 
 
 class SSMastrometryTest(unittest.TestCase):
@@ -228,13 +226,12 @@ class SSMastrometryTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.dbFile = os.path.join(getPackageDir('sims_catUtils'),
-                        'tests', 'testData', 'SSMastrometryCatalog.txt')
+                                  'tests', 'testData', 'SSMastrometryCatalog.txt')
 
         cls.dtype = np.dtype([('id', np.int), ('raJ2000', np.float), ('decJ2000', np.float),
                               ('velRa', np.float), ('velDec', np.float)])
 
         cls.astDB = fileDBObject(cls.dbFile, runtable='test', dtype=cls.dtype, idColKey='id')
-
 
     def testObservedRaDec(self):
         """
@@ -242,7 +239,8 @@ class SSMastrometryTest(unittest.TestCase):
         into observed RA, Dec
         """
 
-        catName = os.path.join(getPackageDir('sims_catUtils'), 'tests', 'scratchSpace', 'ssmAstrometryCat.txt')
+        catName = os.path.join(getPackageDir('sims_catUtils'), 'tests',
+                               'scratchSpace', 'ssmAstrometryCat.txt')
 
         dtype = np.dtype([('id', np.int),
                           ('raObserved', np.float), ('decObserved', np.float)])
@@ -273,7 +271,6 @@ class SSMastrometryTest(unittest.TestCase):
             if os.path.exists(catName):
                 os.unlink(catName)
 
-
     def testSkyVelocity(self):
         """
         Test that getter for sky velocity correctly calculates its output
@@ -299,8 +296,9 @@ def suite():
     suites += unittest.makeSuite(SSMastrometryTest)
     return unittest.TestSuite(suites)
 
+
 def run(shouldExit = False):
-    utilsTests.run(suite(),shouldExit)
+    utilsTests.run(suite(), shouldExit)
 
 if __name__ == "__main__":
     run(True)

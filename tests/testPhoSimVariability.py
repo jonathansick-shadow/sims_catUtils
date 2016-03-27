@@ -4,9 +4,9 @@ import lsst.utils.tests as utilsTests
 import numpy
 from lsst.sims.catalogs.measures.instance import InstanceCatalog
 from lsst.sims.catUtils.utils import testStarsDBObj, testGalaxyDiskDBObj, \
-                                     testGalaxyBulgeDBObj, testGalaxyAgnDBObj
+    testGalaxyBulgeDBObj, testGalaxyAgnDBObj
 from lsst.sims.catUtils.exampleCatalogDefinitions import PhoSimCatalogSersic2D, PhoSimCatalogPoint, \
-                                                         PhoSimCatalogZPoint
+    PhoSimCatalogZPoint
 from lsst.sims.catalogs.generation.utils import makePhoSimTestDB
 from lsst.sims.utils import ObservationMetaData
 from lsst.sims.catUtils.mixins import VariabilityStars, VariabilityGalaxies
@@ -57,7 +57,6 @@ class PhoSimVariabilityTest(unittest.TestCase):
         cls.agnDB = testGalaxyAgnDBObj(driver='sqlite', database=cls.dbName)
         cls.starDB = testStarsDBObj(driver='sqlite', database=cls.dbName)
 
-
     @classmethod
     def tearDownClass(cls):
         if os.path.exists(cls.dbName):
@@ -104,7 +103,6 @@ class PhoSimVariabilityTest(unittest.TestCase):
         for bb, tt in zip(baseline.iter_catalog(), test.iter_catalog()):
             self.assertAlmostEqual(bb[0], tt[4], 10)
 
-
     def testDisks(self):
         baseline = DiskControlCatalog(self.diskDB, obs_metadata=self.obs_metadata)
         test = PhoSimCatalogSersic2D(self.diskDB, obs_metadata=self.obs_metadata)
@@ -119,6 +117,7 @@ def suite():
     suites += unittest.makeSuite(PhoSimVariabilityTest)
 
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit = False):
     utilsTests.run(suite(), shouldExit)

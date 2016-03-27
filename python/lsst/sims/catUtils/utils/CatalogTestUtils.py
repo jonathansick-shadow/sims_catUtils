@@ -14,7 +14,7 @@ from lsst.sims.catUtils.mixins import AstrometryStars, AstrometryGalaxies
 from lsst.sims.photUtils.SignalToNoise import calcSkyCountsPerPixelForM5
 from lsst.sims.photUtils import BandpassDict, SedList
 from lsst.sims.catUtils.mixins import PhotometryGalaxies, PhotometryStars, Variability, \
-                                      VariabilityStars, VariabilityGalaxies, EBVmixin
+    VariabilityStars, VariabilityGalaxies, EBVmixin
 
 __all__ = ["makeStarDatabase", "makeGalaxyDatabase",
            "TestVariabilityMixin", "testDefaults", "cartoonPhotometryStars",
@@ -27,10 +27,10 @@ __all__ = ["makeStarDatabase", "makeGalaxyDatabase",
 def makeStarDatabase(filename='StellarPhotometryDB.db', size=1000, seedVal=32,
                      radius=1.0, pointingRA=50.0, pointingDec=-10.0):
 
-    star_seds = ['km20_5750.fits_g40_5790','m2.0Full.dat','bergeron_6500_85.dat_6700']
+    star_seds = ['km20_5750.fits_g40_5790', 'm2.0Full.dat', 'bergeron_6500_85.dat_6700']
 
-    #Now begin building the database.
-    #First create the tables.
+    # Now begin building the database.
+    # First create the tables.
     conn = sqlite3.connect(filename)
     c = conn.cursor()
 
@@ -59,22 +59,23 @@ def makeStarDatabase(filename='StellarPhotometryDB.db', size=1000, seedVal=32,
         decStar = pointingDec + rr[i]*numpy.sin(theta[i])
 
         cmd = '''INSERT INTO StarAllForceseek VALUES (%i, %f, %f, %f, %f, %f, %f, %f, %s, '%s', %f)''' %\
-                  (i, raStar, decStar, magnormStar[i], mudecl[i], mura[i],
-                  ebv[i], vrad[i], 'NULL', star_seds[i%len(star_seds)], parallax[i])
+            (i, raStar, decStar, magnormStar[i], mudecl[i], mura[i],
+             ebv[i], vrad[i], 'NULL', star_seds[i%len(star_seds)], parallax[i])
 
         c.execute(cmd)
 
     conn.commit()
     conn.close()
 
+
 def makeGalaxyDatabase(filename='GalaxyPhotometryDB.db', size=1000, seedVal=32,
                        radius=1.0, pointingRA=50.0, pointingDec=-10.0):
 
-    galaxy_seds = ['Const.80E07.02Z.spec','Inst.80E07.002Z.spec','Burst.19E07.0005Z.spec']
+    galaxy_seds = ['Const.80E07.02Z.spec', 'Inst.80E07.002Z.spec', 'Burst.19E07.0005Z.spec']
     agn_sed = 'agn.spec'
 
-    #Now begin building the database.
-    #First create the tables.
+    # Now begin building the database.
+    # First create the tables.
     conn = sqlite3.connect(filename)
     c = conn.cursor()
 
@@ -139,7 +140,7 @@ def makeGalaxyDatabase(filename='GalaxyPhotometryDB.db', size=1000, seedVal=32,
     r_ab = numpy.random.sample(size)*4.0 + 17.0
     i_ab = numpy.random.sample(size)*4.0 + 17.0
     z_ab = numpy.random.sample(size)*4.0 + 17.0
-    y_ab = numpy.random.sample(size)*4.0 +17.0
+    y_ab = numpy.random.sample(size)*4.0 + 17.0
     redshift = numpy.random.sample(size)*2.0
 
     t0_mjd = numpy.random.sample(size)*10.0+mjd
@@ -153,11 +154,11 @@ def makeGalaxyDatabase(filename='GalaxyPhotometryDB.db', size=1000, seedVal=32,
     agn_sfy = numpy.random.sample(size)
 
     for i in range(size):
-        varParam = {'varMethodName':'applyAgn',
-                    'pars':{'agn_tau':agn_tau[i], 't0_mjd':t0_mjd[i],
-                    'agn_sfu':agn_sfu[i], 'agn_sfg':agn_sfg[i], 'agn_sfr':agn_sfr[i],
-                    'agn_sfi':agn_sfi[i], 'agn_sfz':agn_sfz[i], 'agn_sfy':agn_sfy[i],
-                    'seed':int(agnSeed[i])}}
+        varParam = {'varMethodName': 'applyAgn',
+                    'pars': {'agn_tau': agn_tau[i], 't0_mjd': t0_mjd[i],
+                             'agn_sfu': agn_sfu[i], 'agn_sfg': agn_sfg[i], 'agn_sfr': agn_sfr[i],
+                             'agn_sfi': agn_sfi[i], 'agn_sfz': agn_sfz[i], 'agn_sfy': agn_sfy[i],
+                             'seed': int(agnSeed[i])}}
 
         paramStr = json.dumps(varParam)
 
@@ -169,20 +170,21 @@ def makeGalaxyDatabase(filename='GalaxyPhotometryDB.db', size=1000, seedVal=32,
                                             '%s', %f, %f,
                                             %f, %f, %f, %f, %f, %f,
                                             %f, %f, %f)''' %\
-                     (i, i, ra[i], dec[i], bra[i], bdec[i], dra[i], ddec[i], agnra[i], agndec[i],
-                     magnorm_bulge[i], magnorm_disk[i], magnorm_agn[i],
-                     galaxy_seds[(i+1)%len(galaxy_seds)], galaxy_seds[i%len(galaxy_seds)], agn_sed,
-                     paramStr,
-                     a_b[i], b_b[i], pa_bulge[i], 4,
-                     a_d[i], b_d[i], pa_disk[i], 1,
-                     'CCM', av_b[i], rv_b[i],
-                     'CCM', av_d[i], rv_d[i],
-                     u_ab[i], g_ab[i], r_ab[i], i_ab[i], z_ab[i], y_ab[i], redshift[i],
-                     BulgeHalfLightRadius[i], DiskHalfLightRadius[i])
+            (i, i, ra[i], dec[i], bra[i], bdec[i], dra[i], ddec[i], agnra[i], agndec[i],
+             magnorm_bulge[i], magnorm_disk[i], magnorm_agn[i],
+             galaxy_seds[(i+1)%len(galaxy_seds)], galaxy_seds[i%len(galaxy_seds)], agn_sed,
+             paramStr,
+             a_b[i], b_b[i], pa_bulge[i], 4,
+             a_d[i], b_d[i], pa_disk[i], 1,
+             'CCM', av_b[i], rv_b[i],
+             'CCM', av_d[i], rv_d[i],
+             u_ab[i], g_ab[i], r_ab[i], i_ab[i], z_ab[i], y_ab[i], redshift[i],
+             BulgeHalfLightRadius[i], DiskHalfLightRadius[i])
         c.execute(cmd)
 
     conn.commit()
     conn.close()
+
 
 @register_class
 class TestVariabilityMixin(Variability):
@@ -195,7 +197,8 @@ class TestVariabilityMixin(Variability):
         amplitude = varParams['amplitude']
         phase = expmjd%period
         magoff = amplitude*numpy.sin(2*numpy.pi*phase)
-        return {'u':magoff, 'g':magoff, 'r':magoff, 'i':magoff, 'z':magoff, 'y':magoff}
+        return {'u': magoff, 'g': magoff, 'r': magoff, 'i': magoff, 'z': magoff, 'y': magoff}
+
 
 class testDefaults(object):
     """
@@ -204,37 +207,37 @@ class testDefaults(object):
     """
 
     def get_proper_motion_ra(self):
-        ra=self.column_by_name('raJ2000')
-        out=numpy.zeros(len(ra))
+        ra = self.column_by_name('raJ2000')
+        out = numpy.zeros(len(ra))
         for i in range(len(ra)):
-            out[i]=0.0
+            out[i] = 0.0
 
         return out
 
-
     def get_proper_motion_dec(self):
-        ra=self.column_by_name('raJ2000')
-        out=numpy.zeros(len(ra))
+        ra = self.column_by_name('raJ2000')
+        out = numpy.zeros(len(ra))
         for i in range(len(ra)):
-            out[i]=0.0
+            out[i] = 0.0
 
         return out
 
     def get_parallax(self):
-        ra=self.column_by_name('raJ2000')
-        out=numpy.zeros(len(ra))
+        ra = self.column_by_name('raJ2000')
+        out = numpy.zeros(len(ra))
         for i in range(len(ra)):
-            out[i]=1.2
+            out[i] = 1.2
 
         return out
 
     def get_radial_velocity(self):
-        ra=self.column_by_name('raJ2000')
-        out=numpy.zeros(len(ra))
+        ra = self.column_by_name('raJ2000')
+        out = numpy.zeros(len(ra))
         for i in range(len(ra)):
-            out[i]=0.0
+            out[i] = 0.0
 
         return out
+
 
 class cartoonPhotometryStars(PhotometryStars):
     """
@@ -249,7 +252,7 @@ class cartoonPhotometryStars(PhotometryStars):
     (see testAlternateBandpassesStars in testPhotometry.py to see how this works)
     """
 
-    @compound('cartoon_u','cartoon_g','cartoon_r','cartoon_i','cartoon_z')
+    @compound('cartoon_u', 'cartoon_g', 'cartoon_r', 'cartoon_i', 'cartoon_z')
     def get_magnitudes(self):
         """
         Example photometry getter for alternative (i.e. non-LSST) bandpasses
@@ -257,29 +260,27 @@ class cartoonPhotometryStars(PhotometryStars):
 
         idNames = self.column_by_name('id')
         columnNames = [name for name in self.get_magnitudes._colnames]
-        bandpassNames = ['u','g','r','i','z']
+        bandpassNames = ['u', 'g', 'r', 'i', 'z']
         bandpassDir = os.path.join(getPackageDir('sims_photUtils'), 'tests', 'cartoonSedTestData')
 
         if not hasattr(self, 'cartoonBandpassDict'):
-            self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames,bandpassDir = bandpassDir,
-                                                             bandpassRoot = 'test_bandpass_')
-
+            self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames, bandpassDir = bandpassDir,
+                                                                                 bandpassRoot = 'test_bandpass_')
 
         output = self._magnitudeGetter(self.cartoonBandpassDict, self.get_magnitudes._colnames)
 
         #############################################################################
-        #Everything below this comment exists solely for the purposes of the unit test
-        #if you need to write a customized getter for photometry that uses non-LSST
-        #bandpasses, you only need to emulate the code above this comment.
-
+        # Everything below this comment exists solely for the purposes of the unit test
+        # if you need to write a customized getter for photometry that uses non-LSST
+        # bandpasses, you only need to emulate the code above this comment.
 
         magNormList = self.column_by_name('magNorm')
         sedNames = self.column_by_name('sedFilename')
         av = self.column_by_name('galacticAv')
 
-        #the two variables below will allow us to get at the SED and magnitude
-        #data from within the unit test class, so that we can be sure
-        #that the mixin loaded the correct bandpasses
+        # the two variables below will allow us to get at the SED and magnitude
+        # data from within the unit test class, so that we can be sure
+        # that the mixin loaded the correct bandpasses
         sublist = SedList(sedNames, magNormList, galacticAvList=av)
 
         for ss in sublist:
@@ -309,53 +310,50 @@ class cartoonPhotometryGalaxies(PhotometryGalaxies):
     (see testAlternateBandpassesGalaxies in testPhotometry.py to see how this works)
     """
 
-    @compound('cbulge_u', 'cbulge_g', 'cbulge_r', 'cbulge_i' ,'cbulge_z')
+    @compound('cbulge_u', 'cbulge_g', 'cbulge_r', 'cbulge_i', 'cbulge_z')
     def get_cartoon_bulge_mags(self):
 
         if not hasattr(self, 'cartoonBandpassDict'):
-            bandpassNames = ['u','g','r','i','z']
+            bandpassNames = ['u', 'g', 'r', 'i', 'z']
             bandpassDir = getPackageDir('sims_photUtils')
             bandpassDir = os.path.join(bandpassDir, 'tests', 'cartoonSedTestData')
 
             self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames,
-                                                                   bandpassDir=bandpassDir,
-                                                                   bandpassRoot = 'test_bandpass_')
+                                                                                 bandpassDir=bandpassDir,
+                                                                                 bandpassRoot = 'test_bandpass_')
 
         return self._magnitudeGetter('bulge', self.cartoonBandpassDict,
                                      self.get_cartoon_bulge_mags._colnames)
-
 
     @compound('cdisk_u', 'cdisk_g', 'cdisk_r', 'cdisk_i', 'cdisk_z')
     def get_cartoon_disk_mags(self):
 
         if not hasattr(self, 'cartoonBandpassDict'):
-            bandpassNames = ['u','g','r','i','z']
+            bandpassNames = ['u', 'g', 'r', 'i', 'z']
             bandpassDir = getPackageDir('sims_photUtils')
             bandpassDir = os.path.join(bandpassDir, 'tests', 'cartoonSedTestData')
 
             self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames,
-                                                                   bandpassDir=bandpassDir,
-                                                                   bandpassRoot = 'test_bandpass_')
+                                                                                 bandpassDir=bandpassDir,
+                                                                                 bandpassRoot = 'test_bandpass_')
 
         return self._magnitudeGetter('disk', self.cartoonBandpassDict,
                                      self.get_cartoon_disk_mags._colnames)
-
 
     @compound('cagn_u', 'cagn_g', 'cagn_r', 'cagn_i', 'cagn_z')
     def get_cartoon_agn_mags(self):
 
         if not hasattr(self, 'cartoonBandpassDict'):
-            bandpassNames = ['u','g','r','i','z']
+            bandpassNames = ['u', 'g', 'r', 'i', 'z']
             bandpassDir = getPackageDir('sims_photUtils')
             bandpassDir = os.path.join(bandpassDir, 'tests', 'cartoonSedTestData')
 
             self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames,
-                                                                   bandpassDir=bandpassDir,
-                                                                   bandpassRoot = 'test_bandpass_')
+                                                                                 bandpassDir=bandpassDir,
+                                                                                 bandpassRoot = 'test_bandpass_')
 
         return self._magnitudeGetter('agn', self.cartoonBandpassDict,
                                      self.get_cartoon_agn_mags._colnames)
-
 
     @compound('ctotal_u', 'ctotal_g', 'ctotal_r', 'ctotal_i', 'ctotal_z')
     def get_cartoon_total_mags(self):
@@ -376,61 +374,62 @@ class cartoonPhotometryGalaxies(PhotometryGalaxies):
         return numpy.array(output)
 
 
-class testCatalog(InstanceCatalog,AstrometryStars,VariabilityStars,testDefaults):
+class testCatalog(InstanceCatalog, AstrometryStars, VariabilityStars, testDefaults):
     catalog_type = 'MISC'
-    default_columns=[('expmjd',5000.0,float)]
+    default_columns = [('expmjd', 5000.0, float)]
 
     def db_required_columns(self):
-        return ['raJ2000'],['varParamStr']
+        return ['raJ2000'], ['varParamStr']
 
 
-class cartoonStars(InstanceCatalog,AstrometryStars,EBVmixin,VariabilityStars,cartoonPhotometryStars,testDefaults):
+class cartoonStars(InstanceCatalog, AstrometryStars, EBVmixin, VariabilityStars, cartoonPhotometryStars, testDefaults):
     """
     A catalog of stars relying on the cartoon photometry methods (which use non-LSST bandpasses
     and output extra data for use by unit tests)
     """
     catalog_type = 'cartoonStars'
-    column_outputs=['id','raObserved','decObserved','magNorm',\
-    'cartoon_u','cartoon_g','cartoon_r','cartoon_i','cartoon_z']
+    column_outputs = ['id', 'raObserved', 'decObserved', 'magNorm',
+                      'cartoon_u', 'cartoon_g', 'cartoon_r', 'cartoon_i', 'cartoon_z']
 
-    #the lists below will contain the SED objects and the magnitudes
-    #in a form that unittest can access and validate
+    # the lists below will contain the SED objects and the magnitudes
+    # in a form that unittest can access and validate
 
     sedMasterList = []
     magnitudeMasterList = []
 
-    #I need to give it the name of an actual SED file that spans the expected wavelength range
+    # I need to give it the name of an actual SED file that spans the expected wavelength range
     defSedName = 'km30_5250.fits_g00_5370'
-    default_columns = [('sedFilename', defSedName, (str,len(defSedName))), ('glon', 180., float),
+    default_columns = [('sedFilename', defSedName, (str, len(defSedName))), ('glon', 180., float),
                        ('glat', 30., float), ('galacticAv', 0.1, float), ('galacticRv', 3.1, float)]
 
-class cartoonStarsOnlyI(InstanceCatalog, AstrometryStars ,EBVmixin, VariabilityStars, PhotometryStars):
+
+class cartoonStarsOnlyI(InstanceCatalog, AstrometryStars, EBVmixin, VariabilityStars, PhotometryStars):
     catalog_type = 'cartoonStarsOnlyI'
-    column_outputs = ['id','raObserved','decObserved','cartoon_i']
+    column_outputs = ['id', 'raObserved', 'decObserved', 'cartoon_i']
 
-    #I need to give it the name of an actual SED file that spans the expected wavelength range
+    # I need to give it the name of an actual SED file that spans the expected wavelength range
     defSedName = 'km30_5250.fits_g00_5370'
-    default_columns = [('sedFilename', defSedName, (str,len(defSedName))), ('glon', 180., float),
+    default_columns = [('sedFilename', defSedName, (str, len(defSedName))), ('glon', 180., float),
                        ('glat', 30., float), ('galacticAv', 0.1, float), ('galacticRv', 3.1, float)]
 
-    @compound('cartoon_u','cartoon_g','cartoon_r','cartoon_i','cartoon_z')
+    @compound('cartoon_u', 'cartoon_g', 'cartoon_r', 'cartoon_i', 'cartoon_z')
     def get_magnitudes(self):
         """
         Example photometry getter for alternative (i.e. non-LSST) bandpasses
         """
         if not hasattr(self, 'cartoonBandpassDict'):
-            bandpassNames = ['u','g','r','i','z']
+            bandpassNames = ['u', 'g', 'r', 'i', 'z']
             bandpassDir = os.path.join(getPackageDir('sims_photUtils'), 'tests', 'cartoonSedTestData')
-            self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames,bandpassDir = bandpassDir,
-                                                                    bandpassRoot = 'test_bandpass_')
+            self.cartoonBandpassDict = BandpassDict.loadTotalBandpassesFromFiles(bandpassNames, bandpassDir = bandpassDir,
+                                                                                 bandpassRoot = 'test_bandpass_')
 
         return self._magnitudeGetter(self.cartoonBandpassDict, self.get_magnitudes._colnames)
-
 
 
 class cartoonStarsIZ(cartoonStarsOnlyI):
     catalog_type = 'cartoonStarsIR'
     column_outputs = ['id', 'raObserved', 'decObserved', 'cartoon_i', 'cartoon_z']
+
 
 class cartoonGalaxies(InstanceCatalog, AstrometryGalaxies, EBVmixin, VariabilityGalaxies, cartoonPhotometryGalaxies, testDefaults):
     """
@@ -438,27 +437,26 @@ class cartoonGalaxies(InstanceCatalog, AstrometryGalaxies, EBVmixin, Variability
     and output extra data for use by unit tests)
     """
     catalog_type = 'cartoonGalaxies'
-    column_outputs=['galid', 'raObserved', 'decObserved',
-                    'ctotal_u', 'ctotal_g', 'ctotal_r', 'ctotal_i', 'ctotal_z',
-                    'cbulge_u', 'cbulge_g', 'cbulge_r', 'cbulge_i', 'cbulge_z',
-                    'cdisk_u', 'cdisk_g', 'cdisk_r', 'cdisk_i', 'cdisk_z',
-                    'cagn_u', 'cagn_g', 'cagn_r', 'cagn_i', 'cagn_z',
-                    'sedFilenameBulge', 'magNormBulge', 'internalAvBulge',
-                    'sedFilenameDisk', 'magNormDisk', 'internalAvDisk',
-                    'sedFilenameAgn', 'magNormAgn', 'redshift']
+    column_outputs = ['galid', 'raObserved', 'decObserved',
+                      'ctotal_u', 'ctotal_g', 'ctotal_r', 'ctotal_i', 'ctotal_z',
+                      'cbulge_u', 'cbulge_g', 'cbulge_r', 'cbulge_i', 'cbulge_z',
+                      'cdisk_u', 'cdisk_g', 'cdisk_r', 'cdisk_i', 'cdisk_z',
+                      'cagn_u', 'cagn_g', 'cagn_r', 'cagn_i', 'cagn_z',
+                      'sedFilenameBulge', 'magNormBulge', 'internalAvBulge',
+                      'sedFilenameDisk', 'magNormDisk', 'internalAvDisk',
+                      'sedFilenameAgn', 'magNormAgn', 'redshift']
 
-    #I need to give it the name of an actual SED file that spans the expected wavelength range
+    # I need to give it the name of an actual SED file that spans the expected wavelength range
     defSedName = "Inst.80E09.25Z.spec"
-    default_columns = [('sedFilenameBulge', defSedName, (str,len(defSedName))),
-                       ('sedFilenameDisk', defSedName, (str,len(defSedName))),
-                       ('sedFilenameAgn', defSedName, (str,len(defSedName))),
+    default_columns = [('sedFilenameBulge', defSedName, (str, len(defSedName))),
+                       ('sedFilenameDisk', defSedName, (str, len(defSedName))),
+                       ('sedFilenameAgn', defSedName, (str, len(defSedName))),
                        ('glon', 210., float),
                        ('glat', 70., float),
-                       ('internalAvBulge',3.1,float),
-                       ('internalAvDisk',3.1,float)]
+                       ('internalAvBulge', 3.1, float),
+                       ('internalAvDisk', 3.1, float)]
 
-    default_formats = {'f' : '%.12f'}
-
+    default_formats = {'f': '%.12f'}
 
     def get_galid(self):
         return self.column_by_name('id')
@@ -467,23 +465,22 @@ class cartoonGalaxies(InstanceCatalog, AstrometryGalaxies, EBVmixin, Variability
 class cartoonGalaxiesIG(InstanceCatalog, AstrometryGalaxies, EBVmixin, VariabilityGalaxies, cartoonPhotometryGalaxies):
 
     catalog_type = 'cartoonGalaxiesIG'
-    column_outputs=['galid','raObserved','decObserved','ctotal_i','ctotal_g']
+    column_outputs = ['galid', 'raObserved', 'decObserved', 'ctotal_i', 'ctotal_g']
 
-    #I need to give it the name of an actual SED file that spans the expected wavelength range
+    # I need to give it the name of an actual SED file that spans the expected wavelength range
     defSedName = "Inst.80E09.25Z.spec"
-    default_columns = [('sedFilenameBulge', defSedName, (str,len(defSedName))),
-                       ('sedFilenameDisk', defSedName, (str,len(defSedName))),
-                       ('sedFilenameAgn', defSedName, (str,len(defSedName))),
+    default_columns = [('sedFilenameBulge', defSedName, (str, len(defSedName))),
+                       ('sedFilenameDisk', defSedName, (str, len(defSedName))),
+                       ('sedFilenameAgn', defSedName, (str, len(defSedName))),
                        ('glon', 210., float),
                        ('glat', 70., float),
-                       ('internalAvBulge',3.1,float),
-                       ('internalAvDisk',3.1,float)]
+                       ('internalAvBulge', 3.1, float),
+                       ('internalAvDisk', 3.1, float)]
 
-    default_formats = {'f' : '%.12f'}
+    default_formats = {'f': '%.12f'}
 
     def get_galid(self):
         return self.column_by_name('id')
-
 
 
 class galaxiesWithHoles(InstanceCatalog, PhotometryGalaxies):
@@ -492,20 +489,19 @@ class galaxiesWithHoles(InstanceCatalog, PhotometryGalaxies):
     component Seds to 'None' so that we can test how sum_magnitudes
     handles NaN's in the context of a catalog.
     """
-    column_outputs = ['raJ2000','decJ2000',
+    column_outputs = ['raJ2000', 'decJ2000',
                       'lsst_u', 'lsst_g', 'lsst_r', 'lsst_i', 'lsst_z', 'lsst_y',
                       'uBulge', 'gBulge', 'rBulge', 'iBulge', 'zBulge', 'yBulge',
                       'uDisk', 'gDisk', 'rDisk', 'iDisk', 'zDisk', 'yDisk',
                       'uAgn', 'gAgn', 'rAgn', 'iAgn', 'zAgn', 'yAgn']
 
-    default_formats = {'f':'%.12f'}
+    default_formats = {'f': '%.12f'}
 
     defSedName = "Inst.80E09.25Z.spec"
     default_columns = [('glon', 210., float),
                        ('glat', 70., float),
-                       ('internalAvBulge',3.1,float),
-                       ('internalAvDisk',3.1,float)]
-
+                       ('internalAvBulge', 3.1, float),
+                       ('internalAvDisk', 3.1, float)]
 
     def get_galid(self):
         return self.column_by_name('id')
@@ -522,83 +518,83 @@ class galaxiesWithHoles(InstanceCatalog, PhotometryGalaxies):
             disk.append(self.defSedName)
             agn.append(self.defSedName)
 
-
         for ix in range(elements/8):
             ibase = ix*8
-            if ibase+1<elements:
+            if ibase+1 < elements:
                 bulge[ibase+1] = 'None'
-            if ibase+2<elements:
+            if ibase+2 < elements:
                 disk[ibase+2] = 'None'
-            if ibase+3<elements:
+            if ibase+3 < elements:
                 agn[ibase+3] = 'None'
-            if ibase+4<elements:
+            if ibase+4 < elements:
                 bulge[ibase+4] = 'None'
                 disk[ibase+4] = 'None'
-            if ibase+5<elements:
+            if ibase+5 < elements:
                 bulge[ibase+5] = 'None'
                 agn[ibase+5] = 'None'
-            if ibase+6<elements:
+            if ibase+6 < elements:
                 disk[ibase+6] = 'None'
                 agn[ibase+6] = 'None'
-            if ibase+7<elements:
+            if ibase+7 < elements:
                 bulge[ibase+7] = 'None'
                 disk[ibase+7] = 'None'
                 agn[ibase+7] = 'None'
 
-
         return numpy.array([bulge, disk, agn])
 
-class testStars(InstanceCatalog, EBVmixin, VariabilityStars, TestVariabilityMixin, PhotometryStars,testDefaults):
+
+class testStars(InstanceCatalog, EBVmixin, VariabilityStars, TestVariabilityMixin, PhotometryStars, testDefaults):
     """
     A generic catalog of stars
     """
     catalog_type = 'test_stars'
-    column_outputs=['id','raJ2000','decJ2000','magNorm',\
-    'lsst_u','sigma_lsst_u',
-    'lsst_g','sigma_lsst_g',\
-    'lsst_r','sigma_lsst_r',\
-    'lsst_i','sigma_lsst_i',\
-    'lsst_z','sigma_lsst_z',\
-    'lsst_y','sigma_lsst_y',\
-    'EBV','varParamStr']
+    column_outputs = ['id', 'raJ2000', 'decJ2000', 'magNorm',
+                      'lsst_u', 'sigma_lsst_u',
+                      'lsst_g', 'sigma_lsst_g',
+                      'lsst_r', 'sigma_lsst_r',
+                      'lsst_i', 'sigma_lsst_i',
+                      'lsst_z', 'sigma_lsst_z',
+                      'lsst_y', 'sigma_lsst_y',
+                      'EBV', 'varParamStr']
     defSedName = 'sed_flat.txt'
-    default_columns = [('sedFilename', defSedName, (str,len(defSedName))), ('glon', 180., float),
+    default_columns = [('sedFilename', defSedName, (str, len(defSedName))), ('glon', 180., float),
                        ('glat', 30., float), ('galacticAv', 0.1, float), ('galacticRv', 3.1, float)]
 
-class testGalaxies(InstanceCatalog,EBVmixin,VariabilityGalaxies,TestVariabilityMixin,PhotometryGalaxies,testDefaults):
+
+class testGalaxies(InstanceCatalog, EBVmixin, VariabilityGalaxies, TestVariabilityMixin, PhotometryGalaxies, testDefaults):
     """
     A generic catalog of galaxies
     """
     catalog_type = 'test_galaxies'
-    column_outputs=['galid','raJ2000','decJ2000',\
-        'redshift',
-        'magNormAgn', 'magNormBulge', 'magNormDisk', \
-        'lsst_u', 'sigma_lsst_u',\
-        'lsst_g', 'sigma_lsst_g',\
-        'lsst_r', 'sigma_lsst_r',\
-         'lsst_i', 'sigma_lsst_i',\
-         'lsst_z', 'sigma_lsst_z',\
-         'lsst_y', 'sigma_lsst_y',\
-        'sedFilenameBulge','uBulge', 'sigma_uBulge', 'gBulge', 'sigma_gBulge', \
-        'rBulge', 'sigma_rBulge', 'iBulge', 'sigma_iBulge', 'zBulge', 'sigma_zBulge',\
-         'yBulge', 'sigma_yBulge', \
-        'sedFilenameDisk','uDisk', 'sigma_uDisk', 'gDisk', 'sigma_gDisk', 'rDisk', 'sigma_rDisk', \
-        'iDisk', 'sigma_iDisk', 'zDisk', 'sigma_zDisk', 'yDisk', 'sigma_yDisk', \
-        'sedFilenameAgn',\
-        'uAgn', 'sigma_uAgn',\
-        'gAgn', 'sigma_gAgn',\
-        'rAgn', 'sigma_rAgn',\
-        'iAgn', 'sigma_iAgn',\
-        'zAgn', 'sigma_zAgn',\
-        'yAgn', 'sigma_yAgn', 'varParamStr']
+    column_outputs = ['galid', 'raJ2000', 'decJ2000',
+                      'redshift',
+                      'magNormAgn', 'magNormBulge', 'magNormDisk',
+                      'lsst_u', 'sigma_lsst_u',
+                      'lsst_g', 'sigma_lsst_g',
+                      'lsst_r', 'sigma_lsst_r',
+                      'lsst_i', 'sigma_lsst_i',
+                      'lsst_z', 'sigma_lsst_z',
+                      'lsst_y', 'sigma_lsst_y',
+                      'sedFilenameBulge', 'uBulge', 'sigma_uBulge', 'gBulge', 'sigma_gBulge',
+                      'rBulge', 'sigma_rBulge', 'iBulge', 'sigma_iBulge', 'zBulge', 'sigma_zBulge',
+                      'yBulge', 'sigma_yBulge',
+                      'sedFilenameDisk', 'uDisk', 'sigma_uDisk', 'gDisk', 'sigma_gDisk', 'rDisk', 'sigma_rDisk',
+                      'iDisk', 'sigma_iDisk', 'zDisk', 'sigma_zDisk', 'yDisk', 'sigma_yDisk',
+                      'sedFilenameAgn',
+                      'uAgn', 'sigma_uAgn',
+                      'gAgn', 'sigma_gAgn',
+                      'rAgn', 'sigma_rAgn',
+                      'iAgn', 'sigma_iAgn',
+                      'zAgn', 'sigma_zAgn',
+                      'yAgn', 'sigma_yAgn', 'varParamStr']
     defSedName = "sed_flat.txt"
-    default_columns = [('sedFilename', defSedName, (str, len(defSedName))) ,
+    default_columns = [('sedFilename', defSedName, (str, len(defSedName))),
                        ('sedFilenameAgn', defSedName, (str, len(defSedName))),
                        ('sedFilenameBulge', defSedName, (str, len(defSedName))),
                        ('sedFilenameDisk', defSedName, (str, len(defSedName))),
                        ('glon', 210., float),
                        ('glat', 70., float),
-                      ]
+                       ]
 
     def get_internalAvDisk(self):
         return numpy.ones(len(self._current_chunk))*0.1

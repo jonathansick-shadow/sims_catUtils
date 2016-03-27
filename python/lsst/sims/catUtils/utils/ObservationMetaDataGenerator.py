@@ -7,6 +7,7 @@ from lsst.sims.utils import ObservationMetaData
 
 __all__ = ["ObservationMetaDataGenerator"]
 
+
 class ObservationMetaDataGenerator(object):
     """
     This is a class that allows the user to query an opsim output database
@@ -28,7 +29,7 @@ class ObservationMetaDataGenerator(object):
         @param [out] a string containing 'val' (i.e. the input value
         enclosed in single quotation marks, if they are not already there)
         """
-        if val[0]=='\'':
+        if val[0] == '\'':
             return val
         else:
             return "'%s'" % val
@@ -43,8 +44,8 @@ class ObservationMetaDataGenerator(object):
                     stored in sims_data/OpSimData/
         """
         if database is None:
-            dbPath = os.path.join(lsst.utils.getPackageDir('sims_data'),'OpSimData/')
-            self.database =  os.path.join(dbPath, 'opsimblitz1_1133_sqlite.db')
+            dbPath = os.path.join(lsst.utils.getPackageDir('sims_data'), 'OpSimData/')
+            self.database = os.path.join(dbPath, 'opsimblitz1_1133_sqlite.db')
             self.driver = 'sqlite'
             self.host = None
             self.port = None
@@ -68,37 +69,37 @@ class ObservationMetaDataGenerator(object):
         else:
             self._seeing_column = 'finSeeing'
 
-        #27 January 2015
-        #self.columnMapping is an list of tuples.  Each tuple corresponds to a column in the opsim
-        #database's summary table.
+        # 27 January 2015
+        # self.columnMapping is an list of tuples.  Each tuple corresponds to a column in the opsim
+        # database's summary table.
 
-        #The 0th element of the tuple is how users will
-        #refer to the OpSim summary table columns (ie. how they are called in getObservationMetaDAta).
+        # The 0th element of the tuple is how users will
+        # refer to the OpSim summary table columns (ie. how they are called in getObservationMetaDAta).
         #
-        #The 1st element of the tuple is how the column is named in the OpSim db.
+        # The 1st element of the tuple is how the column is named in the OpSim db.
         #
-        #The 2nd element of the tuple is how PhoSim refers to the quantity (as of OpSim3_61DBObject.py)
+        # The 2nd element of the tuple is how PhoSim refers to the quantity (as of OpSim3_61DBObject.py)
         #(this is None if PhoSim does not expect the quantity)
         #
-        #The 3rd element of the tuple is the datatype of the column
+        # The 3rd element of the tuple is the datatype of the column
         #
-        #The 4th element of the tuple is any coordinate transformation required to go from the user interface
-        #to the OpSim database (i.e. OpSim stores all angles in radians; we would like users to be
-        #able to specify angles in degrees)
+        # The 4th element of the tuple is any coordinate transformation required to go from the user interface
+        # to the OpSim database (i.e. OpSim stores all angles in radians; we would like users to be
+        # able to specify angles in degrees)
         #
-        #Note that this conforms to an older
-        #PhoSim API.  At some time in the future, both this and OpSim3_61DBObject.py
+        # Note that this conforms to an older
+        # PhoSim API.  At some time in the future, both this and OpSim3_61DBObject.py
         #(and possibly phoSimCatalogExamples.py) will need to be updated to
-        #reflect what PhoSim actually expects now.
+        # reflect what PhoSim actually expects now.
         #
-        self.columnMapping = [('obsHistID', 'obsHistID', 'Opsim_obshistid' ,numpy.int64, None),
+        self.columnMapping = [('obsHistID', 'obsHistID', 'Opsim_obshistid', numpy.int64, None),
                               ('expDate', 'expDate', 'SIM_SEED', int, None),
                               ('fieldRA', 'fieldRA', 'pointingRA', float, numpy.radians),
                               ('fieldDec', 'fieldDec', 'pointingDec', float, numpy.radians),
                               ('moonRA', 'moonRA', 'Opsim_moonra', float, numpy.radians),
                               ('moonDec', 'moonDec', 'Opsim_moondec', float, numpy.radians),
                               ('rotSkyPos', 'rotSkyPos', 'Opsim_rotskypos', float, numpy.radians),
-                              ('telescopeFilter', 'filter', 'Opsim_filter', (str,1), self._put_quotations),
+                              ('telescopeFilter', 'filter', 'Opsim_filter', (str, 1), self._put_quotations),
                               ('rawSeeing', 'rawSeeing', 'Opsim_rawseeing', float, None),
                               ('seeing', self._seeing_column, None, float, None),
                               ('sunAlt', 'sunAlt', 'Opsim_sunalt', float, numpy.radians),
@@ -113,18 +114,17 @@ class ObservationMetaDataGenerator(object):
                               ('m5', 'fiveSigmaDepth', None, float, None),
                               ('skyBrightness', 'filtSkyBrightness', None, float, None)]
 
-        #Set up self.dtype containg the dtype of the recarray we expect back from the SQL query.
-        #Also setup baseQuery which is just the SELECT clause of the SQL query
+        # Set up self.dtype containg the dtype of the recarray we expect back from the SQL query.
+        # Also setup baseQuery which is just the SELECT clause of the SQL query
         dtypeList = []
         self.baseQuery = 'SELECT'
         for column in self.columnMapping:
-            dtypeList.append((column[1],column[3]))
+            dtypeList.append((column[1], column[3]))
             if self.baseQuery != 'SELECT':
                 self.baseQuery += ','
             self.baseQuery += ' ' + column[1]
 
         self.dtype = numpy.dtype(dtypeList)
-
 
     def getObservationMetaData(self, obsHistID=None, expDate=None, fieldRA=None, fieldDec=None,
                                moonRA=None, moonDec=None, rotSkyPos=None, telescopeFilter=None,
@@ -132,7 +132,6 @@ class ObservationMetaDataGenerator(object):
                                moonPhase=None, expMJD=None, altitude=None, azimuth=None,
                                visitExpTime=None, airmass=None, skyBrightness=None,
                                m5=None, boundType='circle', boundLength=0.1, limit=None):
-
         """
         This method will query the OpSim database summary table according to user-specified
         constraints and return a list of of ObservationMetaData instantiations consistent
@@ -183,9 +182,9 @@ class ObservationMetaDataGenerator(object):
         @param [in] skyBrightness
         """
 
-        query = self.baseQuery+ ' FROM SUMMARY'
+        query = self.baseQuery + ' FROM SUMMARY'
 
-        nConstraints = 0 #the number of constraints in this query
+        nConstraints = 0  # the number of constraints in this query
 
         for column in self.columnMapping:
             value = eval(column[0])
@@ -195,13 +194,13 @@ class ObservationMetaDataGenerator(object):
                 else:
                     query += ' WHERE '
 
-                if isinstance(value,tuple):
-                    if len(value)>2:
-                        raise RuntimeError('Cannot pass a tuple longer than 2 elements '+
+                if isinstance(value, tuple):
+                    if len(value) > 2:
+                        raise RuntimeError('Cannot pass a tuple longer than 2 elements ' +
                                            'to getObservationMetaData: %s is len %d'
                                            % (column[0], len(value)))
 
-                    #perform any necessary coordinate transformations
+                    # perform any necessary coordinate transformations
                     if column[4] is not None:
                         vmin = column[4](value[0])
                         vmax = column[4](value[1])
@@ -212,7 +211,7 @@ class ObservationMetaDataGenerator(object):
                     query += ' %s > %s AND %s < %s' % \
                              (column[1], vmin, column[1], vmax)
                 else:
-                    #perform any necessary coordinate transformations
+                    # perform any necessary coordinate transformations
                     if column[4] is not None:
                         vv = column[4](value)
                     else:
@@ -224,22 +223,20 @@ class ObservationMetaDataGenerator(object):
         if limit is not None:
             query += ' LIMIT %d' % limit
 
-        if nConstraints==0 and limit is None:
+        if nConstraints == 0 and limit is None:
             raise RuntimeError('You did not specify any contraints on your query;' +
                                ' you will just return ObservationMetaData for all poitnings')
 
         results = self.opsimdb.execute_arbitrary(query, dtype=self.dtype)
 
-
-        #convert the results into ObservationMetaData instantiations
+        # convert the results into ObservationMetaData instantiations
         obs_output = [ObservationMetaData(m5=pointing['fiveSigmaDepth'], boundType=boundType, boundLength=boundLength,
                                           skyBrightness=pointing['filtSkyBrightness'],
                                           seeing=pointing[self._seeing_column],
                                           phoSimMetaData=OrderedDict([(column[2],
-                                                                    (pointing[column[1]], pointing[column[1]].dtype))
-                                                                    for column in self.columnMapping if column[2] is not None]))
-                                          for pointing in results]
-
+                                                                       (pointing[column[1]], pointing[column[1]].dtype))
+                                                                      for column in self.columnMapping if column[2] is not None]))
+                      for pointing in results]
 
         return obs_output
 

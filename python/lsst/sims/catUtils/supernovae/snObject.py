@@ -210,6 +210,7 @@ class SNObject(sncosmo.Model):
         sncosmoParams['mwebv'] = snState['MWE(B-V)']
         sncosmoModel.set(**sncosmoParams)
         return sncosmoModel
+
     @staticmethod
     def equivsncosmoParamDict(SNstate, SNCosmoModel):
         """
@@ -257,8 +258,6 @@ class SNObject(sncosmo.Model):
             if param in SNCosmoModel.param_names:
                 sncosmoParams[param] = SNstate[param]
         return sncosmoParams
-
-
 
     def summary(self):
         '''
@@ -524,7 +523,7 @@ class SNObject(sncosmo.Model):
         SEDfromSNcosmo = self.SNObjectSED(time=time,
                                           bandpass=bandpassobject)
         return SEDfromSNcosmo.calcFlux(bandpass=bandpassobject) / 3631.0
- 
+
     def catsimBandMag(self, bandpassobject, time, fluxinMaggies=None):
         """
         return the magnitude in the bandpass in the AB magnitude system
@@ -634,7 +633,6 @@ class SNObject(sncosmo.Model):
                                  photParams=photParams)
         return magerr[0]
 
-
     def catsimManyBandFluxes(self, time, bandpassDict,
                              observedBandPassInd=None):
         """
@@ -697,10 +695,9 @@ class SNObject(sncosmo.Model):
 
         return -2.5 * np.log10(f)
 
-
     def catsimManyBandADUs(self, time, bandpassDict,
-                  photParams=None,
-                  observedBandPassInds=None):
+                           photParams=None,
+                           observedBandPassInds=None):
         """
         time: float, mandatory
             MJD of the observation

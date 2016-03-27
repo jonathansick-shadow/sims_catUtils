@@ -4,6 +4,7 @@ from lsst.sims.catalogs.measures.instance import InstanceCatalog
 
 __all__ = ["setupPhotometryCatalog"]
 
+
 def setupPhotometryCatalog(obs_metadata=None, dbConnection=None, catalogClass=None,
                            photometryNameRoot='lsst', uncertainty=False):
     """
@@ -45,8 +46,8 @@ def setupPhotometryCatalog(obs_metadata=None, dbConnection=None, catalogClass=No
     if not issubclass(catalogClass, InstanceCatalog):
         raise RuntimeError('catalogClass needs to be a daughter class of InstanceCatalog')
 
-    column_outputs = None #this will be how we specify the photometric columns for the
-                          #catalogClass
+    column_outputs = None  # this will be how we specify the photometric columns for the
+    # catalogClass
 
     if obs_metadata.bandpass is not None:
         if hasattr(obs_metadata.bandpass, '__iter__'):

@@ -17,11 +17,11 @@ import lsst.utils.tests as utilsTests
 from lsst.utils import getPackageDir
 from lsst.sims.utils import defaultSpecMap
 
+
 class FileMapTest(unittest.TestCase):
 
     def setUp(self):
         self.root_dir = getPackageDir('sims_sed_library')
-
 
     def verifyFile(self, file_name, dir_name):
         """
@@ -54,13 +54,11 @@ class FileMapTest(unittest.TestCase):
         msg = '%s does not exist; it should' % full_path
         self.assertTrue(os.path.exists(full_path), msg=msg)
 
-
     def testMLT(self):
         """
         Test that defaultSpecMap correctly locates MLT dwarf spectra
         """
         self.verifyFile('lte004-3.5-0.0a+0.0.BT-Settl.spec', 'starSED/mlt')
-
 
     def test_m_spec(self):
         """
@@ -69,13 +67,11 @@ class FileMapTest(unittest.TestCase):
         """
         self.verifyFile('m5.1Full.dat', 'starSED/old_mlt')
 
-
     def test_l4_spec(self):
         """
         Test that defaultSpecMap correctly finds l4Full.dat
         """
         self.verifyFile('l4Full.dat', 'starSED/old_mlt')
-
 
     def test_L_spec(self):
         """
@@ -83,13 +79,11 @@ class FileMapTest(unittest.TestCase):
         """
         self.verifyFile('L2_0Full.dat', 'starSED/old_mlt')
 
-
     def test_burrows_spec(self):
         """
         Test that defaultSpecMap correctly find the burrows spectra
         """
         self.verifyFile('burrows+2006c91.21_T1400_g5.5_cf_0.3X', 'starSED/old_mlt')
-
 
     def testBergeron(self):
         """
@@ -97,14 +91,12 @@ class FileMapTest(unittest.TestCase):
         """
         self.verifyFile('bergeron_4750_85.dat_4900', 'starSED/wDs')
 
-
     def testKurucz(self):
         """
         Test that defaultSpecMap correctly locates the kurucz spectra
         """
         self.verifyFile('km30_5000.fits_g10_5040', 'starSED/kurucz')
         self.verifyFile('kp10_9000.fits_g40_9100', 'starSED/kurucz')
-
 
     def testGalaxy(self):
         """
@@ -115,6 +107,7 @@ class FileMapTest(unittest.TestCase):
         self.verifyFile('Exp.40E08.02Z.spec', 'galaxySED')
         self.verifyFile('Burst.40E08.002Z.spec', 'galaxySED')
 
+
 def suite():
     """Returns a suite containing all the test cases in this module."""
     utilsTests.init()
@@ -122,6 +115,7 @@ def suite():
     suites += unittest.makeSuite(FileMapTest)
 
     return unittest.TestSuite(suites)
+
 
 def run(shouldExit=False):
     """Run the tests"""

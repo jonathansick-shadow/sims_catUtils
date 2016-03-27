@@ -2,10 +2,12 @@ import numpy as np
 
 __all__ = ["ObsMetadataBase"]
 
+
 class ObsMetadataBase(object):
     """
     This class provides the InstanceCatalog with a way to write out parameters from its ObsMetadata object.
     """
+
     def _get_nobj(self):
         return len(self.column_by_name('objId'))
 

@@ -7,6 +7,7 @@ flatnessthresh = 1.0e-12
 
 __all__ = ["CosmologyMixin"]
 
+
 class CosmologyMixin(object):
     """
     This class is designed to operate as a mixin for InstanceCatalog classes.
@@ -55,9 +56,9 @@ class CosmologyMixin(object):
         redshift = self.column_by_name("redshift")
 
         if len(redshift) == 0:
-            #newer versions of astropy do not appreciate being passed an
-            #empty numpy array of redshifts; avoid nasty exceptions by
-            #just returning an empty numpy array if we got an empty numpy array
+            # newer versions of astropy do not appreciate being passed an
+            # empty numpy array of redshifts; avoid nasty exceptions by
+            # just returning an empty numpy array if we got an empty numpy array
             return numpy.array([])
 
         return self.cosmology.distanceModulus(redshift)

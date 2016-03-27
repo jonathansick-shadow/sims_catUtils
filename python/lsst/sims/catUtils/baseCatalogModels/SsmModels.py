@@ -6,6 +6,7 @@ from lsst.sims.utils import ObservationMetaData
 
 __all__ = ["SolarSystemObj", "CometObj", "NEOObj", "MBAObj", "MiscSolarSystemObj"]
 
+
 class SolarSystemObj(BaseCatalogObj):
     """
     This is the base CatalogDBObject from which all other Solar System CatalogDBObjects
@@ -32,7 +33,7 @@ class SolarSystemObj(BaseCatalogObj):
                                                   pointingRA = 0.0, pointingDec = 0.0,
                                                   boundLength = 0.1, mjd=51200., bandpassName='r', m5=22.0)
 
-    #Turn off default column mapping since we are querying a dynamic resource
+    # Turn off default column mapping since we are querying a dynamic resource
     generateDefaultColumnMap = False
 
     #: Numpy can't cast a NoneType to an integer.  This works with floats
@@ -43,7 +44,7 @@ class SolarSystemObj(BaseCatalogObj):
     #: I'm over riding the _postprocess_results method to take care of this.
     #: I could also have refactored my database table so that no integer values
     #: contain NULL values.
-    dbDefaultValues = {'varsimobjid':-1, 'myid':-1}
+    dbDefaultValues = {'varsimobjid': -1, 'myid': -1}
 
     #: The following maps column names to database schema.  The tuples
     #: must be at least length 2.  If column name is the same as the name
@@ -51,26 +52,26 @@ class SolarSystemObj(BaseCatalogObj):
     #: should be formatted like a numpy.dtype.  If ommitted, the dtype
     #: is assumed to be float.
     columns = [('objid', 'ssmid', int),
-            ('raJ2000', 'ra*PI()/180.'),
-            ('decJ2000', 'decl*PI()/180.'),
-            ('sedFilename', 'sed_filename', unicode, 40),
-            ('dist', 'dist', numpy.float),
-            ('velRa', 'dradt*PI()/180.'),
-            ('velDec', 'ddecldt*PI()/180.'),
-            ('magNorm', 'magNorm', numpy.float),
-            ('umag', 'umag', numpy.float),
-            ('gmag', 'gmag', numpy.float),
-            ('rmag', 'rmag', numpy.float),
-            ('imag', 'imag', numpy.float),
-            ('zmag', 'zmag', numpy.float),
-            ('ymag', 'ymag', numpy.float)]
+               ('raJ2000', 'ra*PI()/180.'),
+               ('decJ2000', 'decl*PI()/180.'),
+               ('sedFilename', 'sed_filename', unicode, 40),
+               ('dist', 'dist', numpy.float),
+               ('velRa', 'dradt*PI()/180.'),
+               ('velDec', 'ddecldt*PI()/180.'),
+               ('magNorm', 'magNorm', numpy.float),
+               ('umag', 'umag', numpy.float),
+               ('gmag', 'gmag', numpy.float),
+               ('rmag', 'rmag', numpy.float),
+               ('imag', 'imag', numpy.float),
+               ('zmag', 'zmag', numpy.float),
+               ('ymag', 'ymag', numpy.float)]
 
     def _get_column_query(self, colnames=None):
         raise NotImplementedError("We are calling a stored procedure so "
                                   "no need to loop over columns")
 
     def _get_table(self):
-        #This needs to be overridden since __init__() calls the default impl.
+        # This needs to be overridden since __init__() calls the default impl.
         return None
 
     def getIdColKey(self):
@@ -130,7 +131,7 @@ class SolarSystemObj(BaseCatalogObj):
                           "This could be a very bad idea "
                           "if the database is large")
 
-        query = "select %s from [LSSTCATSIM].[dbo].%s("%(mappedcolnames, self.ssmtable)+\
+        query = "select %s from [LSSTCATSIM].[dbo].%s("%(mappedcolnames, self.ssmtable) +\
                 "%f, '%s')"%(obs_metadata.mjd.TAI, regionStr)
 
         if constraint is not None:
@@ -171,7 +172,6 @@ class NEOObj(SolarSystemObj):
     testObservationMetaData = ObservationMetaData(boundType = 'circle',
                                                   pointingRA = 0.0, pointingDec = 0.0,
                                                   boundLength = 0.5, mjd=51200., bandpassName='r', m5=22.0)
-
 
 
 class MBAObj(SolarSystemObj):

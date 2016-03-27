@@ -4,8 +4,9 @@ import numpy
 
 __all__ = ["SersicUtils"]
 
+
 class SersicUtils(object):
-    
+
     def __init__(self, comp_n, min_log_s=-6, max_log_s=6, dlog_s=0.001):
         self.minprob = []
         self.maxprob = []
@@ -20,13 +21,13 @@ class SersicUtils(object):
         if hasattr(arr, "__iter__"):
             return numpy.array(arr)
         else:
-            return numpy.array([arr,])
+            return numpy.array([arr, ])
 
     def _getInterpProbs(self, n, log_s):
-        #These values come from:
-        #http://ned.ipac.caltech.edu/level5/March05/Graham/Graham2.html
+        # These values come from:
+        # http://ned.ipac.caltech.edu/level5/March05/Graham/Graham2.html
         b_n = 1.9992*n-0.3271
-        x = b_n*numpy.power(10,log_s)**(1./n)
+        x = b_n*numpy.power(10, log_s)**(1./n)
         probs = gammainc(2*n, x)
         return interp1d(probs, log_s), numpy.min(probs), numpy.max(probs)
 
@@ -51,10 +52,9 @@ class SersicUtils(object):
         y = R*numpy.sin(angles)
         return x, y
 
-
     def getAngles(self, a, b, num):
-        #from wolfram:
-        #http://mathworld.wolfram.com/Ellipse.html
+        # from wolfram:
+        # http://mathworld.wolfram.com/Ellipse.html
         e = b/a
         tvals = numpy.random.random(num)*2.*numpy.pi
         theta = numpy.arctan(e*numpy.tan(tvals))%numpy.pi
@@ -67,7 +67,7 @@ class SersicUtils(object):
         Res = self.getRe(a, b, angles)
         Rs = self.getR(Res)
         return self.getXY(Rs, angles+pa)
-    
+
     @staticmethod
     def getEllip(x, y):
         Ixx = numpy.sum(x*x)/len(x)
@@ -80,20 +80,20 @@ class SersicUtils(object):
             r_hl = (rs[lrs/2] + rs[lrs/2-1])/2.
         else:
             r_hl = rs[lrs/2]
-        #As defined in Williams et al. 1996
+        # As defined in Williams et al. 1996
         r1 = numpy.sum(numpy.sqrt(x*x + y*y))/len(x)
         e1 = (Ixx - Iyy)/(Ixx + Iyy + 2*numpy.sqrt(Ixx*Iyy - Ixy*Ixy))
         e2 = 2*Ixy/(Ixx + Iyy + 2*numpy.sqrt(Ixx*Iyy - Ixy*Ixy))
         return e1, e2, Ixx, Iyy, Ixy, r1, r_hl
-    
+
     @staticmethod
     def getNphots(ntot, magBulgeNorm, magDiskNorm):
-         if numpy.isnan(magBulgeNorm) or magBulgeNorm < 5.:
-             return 0, ntot
-         elif numpy.isnan(magDiskNorm) or magDiskNorm < 5.:
-             return ntot, 0
-         else:
-            a = numpy.power(10.,(magBulgeNorm - magDiskNorm)/-2.5)
+        if numpy.isnan(magBulgeNorm) or magBulgeNorm < 5.:
+            return 0, ntot
+        elif numpy.isnan(magDiskNorm) or magDiskNorm < 5.:
+            return ntot, 0
+        else:
+            a = numpy.power(10., (magBulgeNorm - magDiskNorm)/-2.5)
             if numpy.isinf(a):
                 return 0, ntot
             b = a/(1.+a)

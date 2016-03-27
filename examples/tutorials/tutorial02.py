@@ -8,11 +8,13 @@ from lsst.sims.utils import ObservationMetaData
 from lsst.sims.catUtils.baseCatalogModels import *
 from lsst.sims.catalogs.measures.instance import InstanceCatalog, cached, compound
 
+
 def radiansToArcSec(value):
     """
     An example unit transformation that converts radians into arc seconds
     """
     return 3600.0*numpy.degrees(value)
+
 
 class ExampleMixin(object):
     """
@@ -36,30 +38,28 @@ class ExampleMixin(object):
         dd = self.column_by_name('decJ2000')
         return numpy.array([rr+dd, rr-dd])
 
+
 class TutorialCatalog(InstanceCatalog, ExampleMixin):
     """
     An example InstanceCatalog that relies on ExampleMixin to provide getters for some
     of its columns
     """
     column_outputs = ['raJ2000', 'decJ2000', 'raPlusOneRadian', 'sum', 'difference',
-                     'raInArcSec']
+                      'raInArcSec']
 
-    #Recall that all angles are manipulated as radians inside the code.
-    #Therefore, to get outputs in degrees, we must define transformations
-    #for the columns we want to transform.
+    # Recall that all angles are manipulated as radians inside the code.
+    # Therefore, to get outputs in degrees, we must define transformations
+    # for the columns we want to transform.
     #
-    #Note that 'raPlusOneRadian' is not converted and will thus be written
-    #in radians.
-    transformations = {'raJ2000':numpy.degrees, 'decJ2000':numpy.degrees,
-                       'sum':numpy.degrees, 'difference':numpy.degrees,
-                       'raInArcSec':radiansToArcSec}
+    # Note that 'raPlusOneRadian' is not converted and will thus be written
+    # in radians.
+    transformations = {'raJ2000': numpy.degrees, 'decJ2000': numpy.degrees,
+                       'sum': numpy.degrees, 'difference': numpy.degrees,
+                       'raInArcSec': radiansToArcSec}
 
-    #This is the key value that needs to be passed to CatalogDBObject.getCatalog()
-    #in order to instantiate a TutorialCatalog
+    # This is the key value that needs to be passed to CatalogDBObject.getCatalog()
+    # in order to instantiate a TutorialCatalog
     catalog_type = 'tutorial_catalog'
-
-
-
 
 
 myDB = CatalogDBObject.from_objid('allstars')
@@ -67,13 +67,13 @@ obs_metadata = ObservationMetaData(pointingRA=220.0, pointingDec=19.0,
                                    boundType='circle', boundLength=0.1,
                                    mjd=52000.0)
 
-#First just write a catalog the way we are used to
+# First just write a catalog the way we are used to
 cat = TutorialCatalog(myDB, obs_metadata=obs_metadata)
 cat.write_catalog('tutorial_mixin_catalog.txt')
 
 
-#Now use CatalogDBObject.getCatalog() to write a catalog (using a different
-#ObservationMetaData)
+# Now use CatalogDBObject.getCatalog() to write a catalog (using a different
+# ObservationMetaData)
 obs_metadata = ObservationMetaData(pointingRA=120.0, pointingDec=-5.0,
                                    boundType='circle', boundLength=0.1,
                                    mjd=52000.0)
